@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{11174796-7679-43e7-9396-436443124c8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Application">
+      <UniqueIdentifier>{0daf64a4-6c8c-44c8-bc56-43174e1da83b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics">
+      <UniqueIdentifier>{7c614c8c-640f-4599-a178-68e731d73419}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Geometry">
+      <UniqueIdentifier>{dccfd18b-4d0a-4baa-b22c-448028b1ca9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\OpenGL">
+      <UniqueIdentifier>{83cee985-5e48-4073-bb8c-1ad1adb62456}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\OpenGL\Buffers">
+      <UniqueIdentifier>{d25baf20-a008-49b4-80f1-4b77ecf7313b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\OpenGL\Mesh">
+      <UniqueIdentifier>{fffe9281-13ca-4259-95b2-b2a3be4bd5d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\OpenGL\Shader">
+      <UniqueIdentifier>{65080b1d-3353-4c9a-905e-8f26ccbdfb76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\OpenGL\Texture">
+      <UniqueIdentifier>{fe74ac8f-af62-4bfd-a3ac-27d85debfd0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\OpenGL\Material">
+      <UniqueIdentifier>{3b8c70e4-36c8-4fc8-a76f-702ee0326351}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Camera">
+      <UniqueIdentifier>{779a9c9c-1bf3-450d-8463-959e2dd11a9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Graphics\Renderer">
+      <UniqueIdentifier>{320d2a7d-4c31-4f75-b7cd-9f82c519ba88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Asset">
+      <UniqueIdentifier>{d3f09cd2-39d4-4e35-81d2-acf0281bc1a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core">
+      <UniqueIdentifier>{c25048a2-db60-4a1b-9467-a0ac5010649f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core\Object">
+      <UniqueIdentifier>{2fc4b87f-fb88-4442-b0dd-f2f4fd069f27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core\Particle System">
+      <UniqueIdentifier>{00006e5d-7a16-45d7-b51a-a314376a57a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core\Particle System\Particle">
+      <UniqueIdentifier>{351c70c1-014d-4788-bfd6-1cdcbd24111e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Utility">
+      <UniqueIdentifier>{6a5fa8eb-964f-42d7-adbf-c25bc2386654}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CBaseAppUTest.cpp">
+      <Filter>Engine\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="CMeshDataGeneratorUTest.cpp">
+      <Filter>Engine\Graphics\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CIndexBufferUTest.cpp">
+      <Filter>Engine\Graphics\OpenGL\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="CVertexBufferUTest.cpp">
+      <Filter>Engine\Graphics\OpenGL\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="CMeshUTest.cpp">
+      <Filter>Engine\Graphics\OpenGL\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="CModelUTest.cpp">
+      <Filter>Engine\Graphics\OpenGL\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="CModelManagerUTest.cpp">
+      <Filter>Engine\Graphics\OpenGL\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="CTechniqueUTest.cpp">
+      <Filter>Engine\Graphics\OpenGL\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="CFwdRenderUTest.cpp">
+      <Filter>Engine\Graphics\OpenGL\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="CTextureLoaderUTest.cpp">
+      <Filter>Engine\Graphics\OpenGL\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="CTexture2DUTest.cpp">
+      <Filter>Engine\Graphics\OpenGL\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="CTextureManagerUTest.cpp">
+      <Filter>Engine\Graphics\OpenGL\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="CMaterialUTest.cpp">
+      <Filter>Engine\Graphics\OpenGL\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="CMaterialManagerUTest.cpp">
+      <Filter>Engine\Graphics\OpenGL\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="CCameraUTest.cpp">
+      <Filter>Engine\Graphics\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="CCameraFPSUTest.cpp">
+      <Filter>Engine\Graphics\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="CMeshDataManagerUTest.cpp">
+      <Filter>Engine\Graphics\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="CAssetManagerUTest.cpp">
+      <Filter>Engine\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="CRendererUTest.cpp">
+      <Filter>Engine\Graphics\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="CObjectUTest.cpp">
+      <Filter>Engine\Core\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="CParticleUTest.cpp">
+      <Filter>Engine\Core\Particle System\Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="CEmitterUTest.cpp">
+      <Filter>Engine\Core\Particle System</Filter>
+    </ClCompile>
+    <ClCompile Include="CParticleManagerUTest.cpp">
+      <Filter>Engine\Core\Particle System</Filter>
+    </ClCompile>
+    <ClCompile Include="CObjectMGRUTest.cpp">
+      <Filter>Engine\Core\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="CTimerUTest.cpp">
+      <Filter>Engine\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="CModelLoaderUTest.cpp">
+      <Filter>Engine\Graphics\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="COpenGLUTest.cpp">
+      <Filter>Engine\Graphics\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="COpenGLTestApp.cpp">
+      <Filter>Engine\Application</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CBaseAppUTest.h">
+      <Filter>Engine\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="CMeshDataGeneratorUTest.h">
+      <Filter>Engine\Graphics\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="CIndexBufferUTest.h">
+      <Filter>Engine\Graphics\OpenGL\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="CVertexBufferUTest.h">
+      <Filter>Engine\Graphics\OpenGL\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="CMeshUTest.h">
+      <Filter>Engine\Graphics\OpenGL\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="CModelUTest.h">
+      <Filter>Engine\Graphics\OpenGL\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="CModelManagerUTest.h">
+      <Filter>Engine\Graphics\OpenGL\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="CTechniqueUTest.h">
+      <Filter>Engine\Graphics\OpenGL\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="CFwdRenderUTest.h">
+      <Filter>Engine\Graphics\OpenGL\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="CTextureLoaderUTest.h">
+      <Filter>Engine\Graphics\OpenGL\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="CTexture2DUTest.h">
+      <Filter>Engine\Graphics\OpenGL\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="CTextureManagerUTest.h">
+      <Filter>Engine\Graphics\OpenGL\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="CMaterialUTest.h">
+      <Filter>Engine\Graphics\OpenGL\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="CMaterialManagerUTest.h">
+      <Filter>Engine\Graphics\OpenGL\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="CCameraUTest.h">
+      <Filter>Engine\Graphics\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="CCameraFPSUTest.h">
+      <Filter>Engine\Graphics\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="CMeshDataManagerUTest.h">
+      <Filter>Engine\Graphics\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="CAssetManagerUTest.h">
+      <Filter>Engine\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="CRendererUTest.h">
+      <Filter>Engine\Graphics\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="CObjectUTest.h">
+      <Filter>Engine\Core\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="CParticleUTest.h">
+      <Filter>Engine\Core\Particle System\Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="CEmitterUTest.h">
+      <Filter>Engine\Core\Particle System</Filter>
+    </ClInclude>
+    <ClInclude Include="CParticleManagerUTest.h">
+      <Filter>Engine\Core\Particle System</Filter>
+    </ClInclude>
+    <ClInclude Include="CObjectMGRUTest.h">
+      <Filter>Engine\Core\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="CTimerUTest.h">
+      <Filter>Engine\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="CModelLoaderUTest.h">
+      <Filter>Engine\Graphics\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="COpenGLUTest.h">
+      <Filter>Engine\Graphics\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="COpenGLTestApp.h">
+      <Filter>Engine\Application</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

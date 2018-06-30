@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Application">
+      <UniqueIdentifier>{2109e44a-ef80-4876-973e-e19b5dc57644}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application\Views">
+      <UniqueIdentifier>{76e4fac6-2e20-4421-a801-43ffadb8549f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CApp.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="CPlayerView.cpp">
+      <Filter>Application\Views</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CApp.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlayerView.h">
+      <Filter>Application\Views</Filter>
+    </ClInclude>
+    <ClInclude Include="IView.h">
+      <Filter>Application\Views</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

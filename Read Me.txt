@@ -1,0 +1,252 @@
+beng_beng
+-------------
+
+An OpenGL renderer.
+
+Uses GLM math library
+
+Required libraries
+-------------------
+
+assimp-3.1.1
+FreeImage
+glew-1.10.0
+glm
+
+
+
+
+Tasks
+-----------------
+
+World object definition
+------------------------------
+
+Movement
+---------
+- Only in the X/Z direction, no height/jumping.
+
+- World consisted of a flat plane and obstructions.
+	+ Walls & world boundary.
+
+	
+- Movement defined as forward/backward based on direction vector.
+- Left/Right rotates object.
+
+
+	
+	
+Base class CObject <------------
+
++ Position
++ rotation (orientation
++ Mesh ID (rendering).
+
+! Bounding sphere/box for collision detection
+	- Likely to be from the CMesh
+
+
+TASKS
+--------------
+
+- Redo container management.
+	- Use vector, then map to vector element.
+	
+	+ Remaining:
+		- CMeshManager
+		- CBufferManager
+		- CShaderManager
+		- CTextureManager
+		- CObjectMGR
+		
+- Problems with using vectors.
+	- class storage and the potential need for polymorphic behaviour.
+	- Way to do it is to have a custom memory allocator to store said objects.
+	- Then use vector to pointer to point to memory.
+	
+
+- Graphic interpolation smoothing on moving objects.	
+	
+	
+	
+03/06/2017
+-----------------
+
+- Refactored map/vector  containers
+		- Switched to vectors only.
+		
+- Review containers with *ptr, since require polymorphic behaviour.
+
+- Draw lists need custome mem manager probably.
+
+
++ Moving to graphic interpolation.
++ Camera movement smoothing.
+
+	
+	
+04/06/2017
+-----------------
+- Smoothing for particles done.
+- Other objects should be the same.
+
+- Will need to add for rotation smoothing.
+- Not yet implemeneted solution for rotating objects
+
+- Camera movement smoothing
+
+
+++ Will required quaternions for object rotations
+
+
+
+31/01/2017
+-----------
+
+Using point light shader.
+Pre-define single light inside of the shader code.
+
+
+
+
+21/01/2018
+---------------
+
+Light designs
+**************
+
+4 types of light:
+
+- Ambient
+- Directional
+- Point light
+- Spot light
+
+common light properties:
+
+- Colour of light
+- Intensity/brightness
+
+
+Ambient light properies
+------------------------
+This light type is to simulate general global lighting. A cheat method of simply adding a constant light value rather having to calculate light reflections.
+
+- Colour
+- Intensity
+
+
+Direction Light properties
+---------------------------
+Type of light where the source is really far away (sun light).
+
+- Colour
+- Direction of light
+- intensity
+
+
+Point lightp properties
+-----------------------------
+Light that comes from a source where the light emits in every direction from the source.
+
+- Colour
+- Intensity
+- Position (where the light source is in world)
+- Attenuation (light fall off).
+
+
+Spot light properties
+------------------------------
+Light that comes from a source and shines light in a spot.
+
+- Colour
+- Intensity
+- Position ( position in world space)
+- Direction (direction the spot light is pointing).
+- Attenuation (light distance fall off).
+- Cone attenuation (light fall off from center of spot to edge.)
+
+
+
+Shader.
+Lights are uniforms.
+-	Array of them that determines which are used or not.
+
+10 Spots and 15 point lights
+- 1 direction light and 1 ambient.
+
+
+
+
+Light manager to handle creation of light and determine which are on/off,
+
+
+
+SLight
+--------------
+
+enum eLightType 
+{
+	eAmbient,
+	eDirectional,
+	ePoint,
+	eSpot,
+	eLightTotal
+}
+
+class CLight
+{
+public:
+	SLight();
+	~SLight();
+	
+protected:
+	eLightType m_type;
+	glm::Vec3 m_colour;
+	float m_intensity;
+	glm::vec3 m_position;
+	glm::vec3 m_direction;
+	float m_attenuation;
+	float m_contAttenuation;
+};
+
+
+
+class CLightManager
+{
+public:
+	CLightManager();
+	~CLightManager();
+	
+	bool CreateLight(...);
+	
+	CLight* GetLight();
+	
+protected:
+	
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
