@@ -18,6 +18,12 @@
 #include "CModelManager.h"
 #include "CModel.h"
 
+#pragma comment(lib, "assimp.lib")
+
+#ifdef _WIN64
+#pragma comment(lib, "assimp-vc140-mt.lib")
+#endif
+
 class CModelLoader
 {
 public:
