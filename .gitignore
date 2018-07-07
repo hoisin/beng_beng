@@ -50,9 +50,9 @@ Temporary Items
 # Project ignores
 # =========================
 .vs/
-Debug/
-Release/
-x64/
+/Debug/
+/Release/
+/x64/
 beng_beng/Debug/
 beng_beng/Release/
 beng_beng/x64/
