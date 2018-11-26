@@ -42,9 +42,9 @@ TEST_F(CModelManagerUTest, CreateModel)
 	EXPECT_EQ(true, result) << "Failed to initialise test app";
 	if (result)
 	{
-		result = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
-		EXPECT_EQ(true, result) << "Failed to initialise OpenGL";
-		if (result)
+		ErrorId error = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
+		EXPECT_EQ(ERRORID_NONE, error) << "Failed to initialise OpenGL";
+		if (!IsError(error))
 		{
 			CModelManager modelMgr;
 			CModel* newModel;
@@ -82,9 +82,9 @@ TEST_F(CModelManagerUTest, GetTests)
 	EXPECT_EQ(true, result) << "Failed to initialise test app";
 	if (result)
 	{
-		result = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
-		EXPECT_EQ(true, result) << "Failed to initialise OpenGL";
-		if (result)
+		ErrorId error = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
+		EXPECT_EQ(ERRORID_NONE, error) << "Failed to initialise OpenGL";
+		if (!IsError(error))
 		{
 			CModelManager modelMgr;
 			CModel* newModel;

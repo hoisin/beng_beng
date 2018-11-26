@@ -19,6 +19,8 @@
 #include <gl/wglew.h>
 #include <string>
 
+#include "Errors.h"
+
 class CTexture2D
 {
 public:
@@ -26,13 +28,12 @@ public:
 	CTexture2D(const CTexture2D& other);
 	~CTexture2D();
 
-	bool LoadTexture(unsigned int width, unsigned int height, GLint internalFormat,
+	ErrorId LoadTexture(unsigned int width, unsigned int height, GLint internalFormat,
 		GLint texFormat, GLenum dataType, unsigned char *pData);
 
 	void UseTexture();
 
 	GLuint GetTexture() const;
-
 	const std::string& GetID() const;
 
 	void CleanUp();

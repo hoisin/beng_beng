@@ -12,19 +12,16 @@
 #include <string>
 #include "GfxDefs.h"
 
+#include "Errors.h"
+
 class CTextureLoader
 {
 public:
 	CTextureLoader();
 	~CTextureLoader();
 
-	bool LoadFile(const std::string &fileName, unsigned int &outWidth, unsigned int &outHeight, 
+	ErrorId LoadFile(const std::string &fileName, unsigned int &outWidth, unsigned int &outHeight, 
 		ETextureFormat &eTexFormat, unsigned int &bytesPerPixel, unsigned char** pOutData);
-
-	// Can probably remove this
-	// Not used.
-	bool LoadBMP(const std::string &fileName, unsigned int &outWidth, unsigned int &outHeight,
-		unsigned char** pOutData);
 };
 
 #endif

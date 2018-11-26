@@ -32,24 +32,30 @@ void CBaseAppUTest::TearDown()
 // Testing initialise
 TEST(CBaseApp, Initialise)
 {
-	bool result = false;
 	std::string windowName = "Local Test Window";
-	int width = 800;
-	int height = 600;
+	int width = g_windowWidth;
+	int height = g_windowHeight;
 	COpenGLTestApp appTest;
 
 	EXPECT_EQ(false, appTest.IsInitialised()) << "Expected IsInitialised() to return false when initialise has not yet ran!";
 
-	result = appTest.Initialise(windowName, width, height);
-	EXPECT_EQ(true, result) << "Failed to initialise app";
+	ErrorId result = appTest.Initialise(windowName, width, height);
+	EXPECT_EQ(ERRORID_NONE, result) << "Failed to initialise app";
 	EXPECT_EQ(true, appTest.IsInitialised()) << "Expected IsInitialised() to return true after initialise has ran!";
 	appTest.ShutDown();
 
-	// Invalid test
-	result =  appTest.Initialise("", width, height);
+	// Invalid tests
+	result = appTest.Initialise("", width, height);
+	std::string appWindowName = appTest.GetWindowName();
 	appTest.ShutDown();
+	EXPECT_EQ(ERRORID_NONE, result) << "Expected app to initialise even with empty window title";
+	EXPECT_EQ(DEFAULT_WINDOW_TITLE, appWindowName) << "Expected app window name to be default window name when emtpy window title specified";
 
-	EXPECT_EQ(false, result) << "Expected initialise fail with app without window name";
+	result = appTest.Initialise(windowName, 0, height);
+	EXPECT_EQ(ERRORID_APP_INIT_INVALID_WINDOW_WIDTH_HEIGHT, result) << "Expected error with width of 0";
+	
+	result = appTest.Initialise(windowName, width, 0);
+	EXPECT_EQ(ERRORID_APP_INIT_INVALID_WINDOW_WIDTH_HEIGHT, result) << "Expected error with height of 0";
 	
 }
 

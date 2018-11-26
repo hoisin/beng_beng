@@ -227,6 +227,13 @@ protected:
 };
 
 
+26/11/2018
+---------------------
+Refactor/revise work:
+
+Done stuff:
+- COpenGL & Tests
+
 
 
 

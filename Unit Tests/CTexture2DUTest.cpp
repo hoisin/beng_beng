@@ -41,9 +41,9 @@ TEST_F(CTexture2DUTest, LoadTexture)
 	EXPECT_EQ(true, result) << "Failed to initialise test app";
 	if (result)
 	{
-		result = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
-		EXPECT_EQ(true, result) << "Failed to initialise OpenGL";
-		if(result)
+		ErrorId error = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
+		EXPECT_EQ(ERRORID_NONE, error) << "Failed to initialise OpenGL";
+		if(!IsError(error))
 		{
 			std::string testTextureID = "TestTexture";
 			std::string testFileBMP = "..\\UTest Data\\Textures\\test.bmp";
@@ -57,9 +57,9 @@ TEST_F(CTexture2DUTest, LoadTexture)
 			CTexture2D testTexture2D(testTextureID);
 
 			// Attempt to load test image
-			result = textureLoader.LoadFile(testFileBMP, width, height, format, bytesPerPixel, &pTextureData);
-			EXPECT_EQ(true, result) << "Failed to load test BMP texture";
-			if (result)
+			error  = textureLoader.LoadFile(testFileBMP, width, height, format, bytesPerPixel, &pTextureData);
+			EXPECT_EQ(ERRORID_NONE, error) << "Failed to load test BMP texture";
+			if (!IsError(error))
 			{
 				// Check image info.
 				// Should not matter too much unless unsupported format
@@ -70,8 +70,8 @@ TEST_F(CTexture2DUTest, LoadTexture)
 
 				if (format != eTextureFormatNone)
 				{
-					result = testTexture2D.LoadTexture(width, height, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE, pTextureData);
-					EXPECT_EQ(true, result) << "Failed to load texture to GPU";
+					error = testTexture2D.LoadTexture(width, height, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE, pTextureData);
+					EXPECT_EQ(ERRORID_NONE, error) << "Failed to load texture to GPU";
 					if (result)
 					{
 						EXPECT_EQ(testTextureID, testTexture2D.GetID()) << "Unexpected ID";

@@ -32,7 +32,7 @@ CTexture2D::~CTexture2D()
 //	Texture is loaded into GPU memory.
 //
 //------------------------------------------------------------------------------
-bool CTexture2D::LoadTexture(unsigned int width, unsigned int height, GLint internalFormat,
+ErrorId CTexture2D::LoadTexture(unsigned int width, unsigned int height, GLint internalFormat,
 	GLint texFormat, GLenum dataType, unsigned char *pData)
 {
 	glGenTextures(1, &m_textureHandle);
@@ -62,7 +62,7 @@ bool CTexture2D::LoadTexture(unsigned int width, unsigned int height, GLint inte
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	return true;
+	return ERRORID_NONE;
 }
 
 //------------------------------------------------------------------------------

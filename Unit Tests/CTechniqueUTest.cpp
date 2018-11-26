@@ -40,9 +40,9 @@ TEST_F(CTechniqueUTest, Initialise)
 	EXPECT_EQ(true, result) << "Failed to initialise test window";
 	if (result)
 	{
-		result = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
-		EXPECT_EQ(true, result) << "Failed to initialise OpenGL";
-		if (result)
+		ErrorId error = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
+		EXPECT_EQ(ERRORID_NONE, error) << "Failed to initialise OpenGL";
+		if (!IsError(error))
 		{
 			CTechnique testShader;
 			result = testShader.VInit();

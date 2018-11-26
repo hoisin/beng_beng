@@ -39,9 +39,9 @@ TEST_F(CTextureManagerUTest, LoadTextures)
 	EXPECT_EQ(true, result) << "Failed to initialise test app";
 	if (result)
 	{
-		result = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
-		EXPECT_EQ(true, result) << "Failed to initialise OpenGL";
-		if (result)
+		ErrorId error = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
+		EXPECT_EQ(ERRORID_NONE, error) << "Failed to initialise OpenGL";
+		if (!IsError(error))
 		{
 			int totalTextures = 10;
 			std::vector<std::string> textureIDs;
@@ -81,9 +81,9 @@ TEST_F(CTextureManagerUTest, GetTextures)
 	EXPECT_EQ(true, result) << "Failed to initialise test app";
 	if (result)
 	{
-		result = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
-		EXPECT_EQ(true, result) << "Failed to initialise OpenGL";
-		if (result)
+		ErrorId error = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
+		EXPECT_EQ(ERRORID_NONE, error) << "Failed to initialise OpenGL";
+		if (!IsError(error))
 		{
 			CTextureManager textureMgr;
 			int totalTextures = 20;

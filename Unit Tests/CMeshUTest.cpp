@@ -40,9 +40,9 @@ TEST_F(CMeshUTest, LoadMesh)
 	EXPECT_EQ(true, bTestAppInit) << "testApp failed to initialise!";
 	if (bTestAppInit)
 	{
-		bool bInitOpenGL = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
-		EXPECT_EQ(true, bInitOpenGL) << "Failed to initialise OpenGL";
-		if (bInitOpenGL)
+		ErrorId error = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
+		EXPECT_EQ(ERRORID_NONE, error) << "Failed to initialise OpenGL";
+		if (!IsError(error))
 		{
 			// Test mesh data, doesn't need to be anything
 			MeshData testMeshData(eVertexPNT, 200, 300);

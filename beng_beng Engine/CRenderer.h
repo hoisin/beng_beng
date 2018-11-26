@@ -30,7 +30,7 @@ public:
 	CRenderer();
 	~CRenderer();
 
-	bool Initialise(HINSTANCE hInstance, HWND* hwnd, UINT windowWidth,
+	ErrorId Initialise(HINSTANCE hInstance, HWND* hwnd, UINT windowWidth,
 		UINT windowHeight, WNDPROC funcCallBack);
 
 	void ResizeViewPort(UINT windowWidth, UINT windowHeight);

@@ -45,9 +45,11 @@ bool CTextureManager::LoadTexture(const std::string& textureID, const std::strin
 	CTexture2D newTexture(textureID);
 
 	bool bResult = false;
+	ErrorId error = m_pTextureLoader.LoadFile(textureFile, width, height, eTexFormat, bpp, &pTextureData);
 
 	// Try to load texture file into memory
-	if (m_pTextureLoader.LoadFile(textureFile, width, height, eTexFormat, bpp, &pTextureData)) {
+	if (!IsError(error)) 
+	{
 		// On success, upload loaded texture to OpenGL
 		//
 		// Flag as successful

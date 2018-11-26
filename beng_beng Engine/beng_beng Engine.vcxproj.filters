@@ -172,6 +172,9 @@
     <ClCompile Include="CCollisionShape.cpp">
       <Filter>Engine\Utility</Filter>
     </ClCompile>
+    <ClCompile Include="Errors.cpp">
+      <Filter>Engine\Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBaseApp.h">
@@ -275,6 +278,9 @@
     </ClInclude>
     <ClInclude Include="CCollisionShape.h">
       <Filter>Engine\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Errors.h">
+      <Filter>Engine\Application</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

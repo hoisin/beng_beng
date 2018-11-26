@@ -52,6 +52,7 @@
     <ClCompile Include="CTimer.cpp" />
     <ClCompile Include="CVertexBuffer.cpp" />
     <ClCompile Include="CWorld.cpp" />
+    <ClCompile Include="Errors.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +89,7 @@
     <ClInclude Include="CTimer.h" />
     <ClInclude Include="CVertexBuffer.h" />
     <ClInclude Include="CWorld.h" />
+    <ClInclude Include="Errors.h" />
     <ClInclude Include="GfxDefs.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

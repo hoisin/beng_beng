@@ -40,8 +40,8 @@ TEST_F(COpenGLUTest, Initialise)
 	EXPECT_EQ(true, result) << "Failed to initialise testApp setup";
 	if (result)
 	{
-		result = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
-		EXPECT_EQ(true, result) << "Failed to initialise OpenGL";
+		ErrorId error = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
+		EXPECT_EQ(ERRORID_NONE, error) << "Failed to initialise OpenGL";
 	}
 }
 
@@ -51,15 +51,18 @@ TEST_F(COpenGLUTest, ResizeViewPort)
 	EXPECT_EQ(true, result) << "Failed to initialise testApp setup";
 	if (result)
 	{
-		// Test resize of viewport
-		result = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
+		// Test invalid resize
+		ErrorId error = m_testApp.m_openGL.ResizeOpenGLViewportFull();
+		EXPECT_EQ(ERRORID_GFX_NULL_HWND, error) << "Expected error when resize without initialise";
 
-		EXPECT_EQ(true, result) << "Failed to initialise OpenGL";
-		if (result)
+		// Test resize of viewport
+		error = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
+		EXPECT_EQ(ERRORID_NONE, error) << "Failed to initialise OpenGL";
+		if (!IsError(error))
 		{
 			COpenGL* openGL = &m_testApp.m_openGL;
-			result = openGL->ResizeOpenGLViewportFull();
-			EXPECT_EQ(true, result) << "Failed to reisze viewport";
+			error = openGL->ResizeOpenGLViewportFull();
+			EXPECT_EQ(ERRORID_NONE, error) << "Failed to reisze viewport";
 		}
 	}
 }
@@ -71,10 +74,9 @@ TEST_F(COpenGLUTest, GetTests)
 	if (result)
 	{
 		// Initialise OpenGL
-		result = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
-
-		EXPECT_EQ(true, result) << "Failed to initialise OpenGL";
-		if (result)
+		ErrorId error = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
+		EXPECT_EQ(ERRORID_NONE, error) << "Failed to initialise OpenGL";
+		if (!IsError(error))
 		{
 			COpenGL* openGL = &m_testApp.m_openGL;
 			EXPECT_EQ(m_width, openGL->GetScreenWidth()) << "Unexpected screen width, expected: " + std::to_string(m_width) +

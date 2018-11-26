@@ -39,9 +39,9 @@ TEST_F(CAssetManagerUTest, ManagerTest)
 	EXPECT_EQ(true, result) << "Failed to initialise testApp setup";
 	if (result)
 	{
-		result = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
-		EXPECT_EQ(true, result) << "Failed to initialise OpenGL";
-		if (result)
+		ErrorId error = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
+		EXPECT_EQ(ERRORID_NONE, error) << "Failed to initialise OpenGL";
+		if (!IsError(error))
 		{
 			// Initialise asset maanger
 			result = ASSETMGR->Initialise();

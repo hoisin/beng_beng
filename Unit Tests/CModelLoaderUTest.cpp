@@ -33,9 +33,9 @@ TEST_F(CModelLoaderUTest, ModelLoad)
 	EXPECT_EQ(result, true) << "Failed to initialise test app";
 	if (result)
 	{
-		result = m_app.InitOpenGL(m_majorVer, m_minorVer);
-		EXPECT_EQ(result, true) << "Failed to initialise OpenGL";
-		if (result)
+		ErrorId error = m_app.InitOpenGL(m_majorVer, m_minorVer);
+		EXPECT_EQ(ERRORID_NONE, error) << "Failed to initialise OpenGL";
+		if (!IsError(error))
 		{
 			result = m_modelLoader.Initialise(&m_meshDataMgr, &m_textureMgr, &m_materialMgr, &m_modelMgr);
 			EXPECT_EQ(result, true) << "Failed to initialise model loader";

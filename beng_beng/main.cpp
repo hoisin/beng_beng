@@ -17,7 +17,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR sCmdLine,
 
 	CApp app;
 
-	if (!app.InitialiseApp("OpenGL 3.3 App", 800, 600, hInstance)) {
+	if (app.Initialise("OpenGL 3.3 App", 800, 600, hInstance) != ERRORID_NONE) {
 		// Should maybe display some error message error message here.
 		// Rather than just exiting the program.
 		return 0;

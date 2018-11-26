@@ -40,9 +40,9 @@ TEST_F(CFwdRenderUTest, Initialise)
 	EXPECT_EQ(true, result) << "Failed to initialise test window";
 	if (result)
 	{
-		result = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
-		EXPECT_EQ(true, result) << "Failed to initialise OpenGL";
-		if (result)
+		ErrorId error = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
+		EXPECT_EQ(ERRORID_NONE, error) << "Failed to initialise OpenGL";
+		if (!IsError(error))
 		{
 			std::string vertexShaderPath = "..\\UTest Data\\Shaders\\texturePointVertexShader.vsh";
 			std::string fragmentShaderPath = "..\\UTest Data\\Shaders\\texturePointFragmentShader.fsh";
