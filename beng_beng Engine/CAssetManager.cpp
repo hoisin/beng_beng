@@ -176,49 +176,52 @@ bool CAssetManager::LoadModel(const std::string& fileDir, const std::string& fil
 	return result;
 }
 
-bool CAssetManager::CreateModelCube(int size, int subDiv, EVertexType vertType, const std::string & modelID, const std::string& materialID)
+ErrorId CAssetManager::CreateModelCube(int size, int subDiv, EVertexType vertType, const std::string & modelID, const std::string& materialID)
 {
 	bool result = m_meshDataMgr.CreateCube(modelID, size, vertType, subDiv);
+	ErrorId error;
 
 	if (result) 
 	{
 		CModel* pNewModel = m_modelMgr.CreateModel(modelID);
 		if (pNewModel != nullptr) 
-			result = pNewModel->AddMesh(m_meshDataMgr.GetMeshData(modelID), materialID);
+			error = pNewModel->AddMesh(m_meshDataMgr.GetMeshData(modelID), materialID);
 		// Else Remove the created mesh data?
 	}
 
-	return result;
+	return error;
 }
 
-bool CAssetManager::CreateModeSphere(int size, int subDiv, EVertexType vertType, const std::string & modelID, const std::string& materialID)
+ErrorId CAssetManager::CreateModeSphere(int size, int subDiv, EVertexType vertType, const std::string & modelID, const std::string& materialID)
 {
 	bool result = m_meshDataMgr.CreateSphere(modelID, size, vertType, subDiv);
+	ErrorId error;
 
 	if (result)
 	{
 		CModel* pNewModel = m_modelMgr.CreateModel(modelID);
 		if (pNewModel != nullptr)
-			result = pNewModel->AddMesh(m_meshDataMgr.GetMeshData(modelID), materialID);
+			error = pNewModel->AddMesh(m_meshDataMgr.GetMeshData(modelID), materialID);
 		// Else Remove the created mesh data?
 	}
 
-	return result;
+	return error;
 }
 
-bool CAssetManager::CreateModelPlane(int size, int subDiv, EVertexType vertType, const std::string & modelID, const std::string& materialID)
+ErrorId CAssetManager::CreateModelPlane(int size, int subDiv, EVertexType vertType, const std::string & modelID, const std::string& materialID)
 {
 	bool result = m_meshDataMgr.CreatePlane(modelID, size, vertType, subDiv);
+	ErrorId error;
 
 	if (result)
 	{
 		CModel* pNewModel = m_modelMgr.CreateModel(modelID);
 		if (pNewModel != nullptr)
-			result = pNewModel->AddMesh(m_meshDataMgr.GetMeshData(modelID), materialID);
+			error = pNewModel->AddMesh(m_meshDataMgr.GetMeshData(modelID), materialID);
 		// Else Remove the created mesh data?
 	}
 
-	return result;
+	return error;
 }
 
 //------------------------------------------------------------------
@@ -353,7 +356,7 @@ CModel * CAssetManager::GetModel(const std::string & modelID)
 //  to CModel. Material ID is assigned to the new CMesh.
 //
 //------------------------------------------------------------------
-bool CAssetManager::AddMeshToModel(const std::string & modelID, const std::string & meshDataID,
+ErrorId CAssetManager::AddMeshToModel(const std::string & modelID, const std::string & meshDataID,
 	const std::string& meshMaterialID)
 {
 	CModel* pModel = m_modelMgr.GetModel(modelID);
@@ -364,6 +367,6 @@ bool CAssetManager::AddMeshToModel(const std::string & modelID, const std::strin
 			return pModel->AddMesh(pData, meshMaterialID);
 		
 	}
-	return false;
+	return ERRORID_NONE; // CHANGE THIS!!!!!!!!!!!!!!!!!
 }
 

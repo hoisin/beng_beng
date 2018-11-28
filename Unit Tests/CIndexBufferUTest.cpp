@@ -52,8 +52,9 @@ TEST_F(CIndexBufferUTest, LoadBufferData)
 			std::string bufferID = "TestIdxBuffer";
 			CIndexBuffer idxBuffer;
 			EXPECT_EQ(false, idxBuffer.IsLoadedData()) << "Expected loaded data to be false before loading!";
-
-			EXPECT_EQ(true, idxBuffer.LoadData(pIdxBuffer, indexCount)) << "Failed to load index buffer";
+			
+			error = idxBuffer.LoadData(pIdxBuffer, indexCount);
+			EXPECT_EQ(ERRORID_NONE, error) << "Failed to load index buffer";
 			EXPECT_EQ(true, idxBuffer.IsLoadedData()) << "Expected loaded data to be true after loading!";
 			EXPECT_NE(0, idxBuffer.GetElementBuffer()) << "Element buffer ID 0 after loading!";
 			EXPECT_NE(0, idxBuffer.GetIndexCount()) << "Index count 0 after loading!";
@@ -65,8 +66,10 @@ TEST_F(CIndexBufferUTest, LoadBufferData)
 			EXPECT_EQ(false, idxBuffer.IsLoadedData()) << "Expected loaded data to be false after unloading!";
 
 			// Invalid load
-			EXPECT_EQ(false, idxBuffer.LoadData(nullptr, indexCount)) << "Expected load fail on null pointer data";
-			EXPECT_EQ(false, idxBuffer.LoadData(pIdxBuffer, 0)) << "Expected load fail on 0 index count";
+			error = idxBuffer.LoadData(nullptr, indexCount);
+			EXPECT_EQ(ERRORID_GFX_INDEX_BUFFER_NULL_DATA, error) << "Expected load fail on null pointer data";
+			error = idxBuffer.LoadData(pIdxBuffer, 0);
+			EXPECT_EQ(ERRORID_GFX_INDEX_BUFFER_ZERO_INDEX_COUNT, error) << "Expected load fail on 0 index count";
 
 			// Clean up
 			delete[] pIdxBuffer;

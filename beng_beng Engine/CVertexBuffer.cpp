@@ -34,12 +34,16 @@ CVertexBuffer::~CVertexBuffer()
 //	Loads mesh data in RAM to VRAM.
 //
 //----------------------------------------------------------------------------------------------------
-bool CVertexBuffer::LoadData(void* pVertData, glm::uint32 vertexCount, EVertexType vertType)
+ErrorId CVertexBuffer::LoadData(void* pVertData, glm::uint32 vertexCount, EVertexType vertType)
 {
-	// Using simple validity checks.
-	// Consider expanding error checking in OpenGL calls below.
-	if (pVertData == nullptr || vertexCount == 0 || vertType == eVertexUnknown)
-		return false;
+	if (pVertData == nullptr)
+		return ERRORID_GFX_VERTEX_BUFFER_NULL_DATA;
+
+	if (vertexCount == 0)
+		return ERRORID_GFX_VERTEX_BUFFER_ZERO_VERTEX_COUNT;
+
+	if (vertType == EVertexType::eVertexUnknown)
+		return ERRORID_GFX_VERTEX_BUFFER_UNKNOWN_VERTEXTYPE;
 
 	m_vertCount = vertexCount;
 	m_vertType = vertType;
@@ -72,7 +76,6 @@ bool CVertexBuffer::LoadData(void* pVertData, glm::uint32 vertexCount, EVertexTy
 		glBufferData(GL_ARRAY_BUFFER, m_vertCount*sizeof(SVertexTypePC), pVertData, GL_STATIC_DRAW);
 		glVertexAttribPointer((GLuint)1, 3, GL_FLOAT, GL_FALSE, sizeof(SVertexTypePC), (void*)sizeof(glm::vec3));
 		
-
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		break;
 
@@ -255,7 +258,7 @@ bool CVertexBuffer::LoadData(void* pVertData, glm::uint32 vertexCount, EVertexTy
 	glBindVertexArray(0);
 
 	m_bLoadedData = true;
-	return true;
+	return ERRORID_NONE;
 }
 
 

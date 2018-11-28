@@ -29,35 +29,34 @@ CIndexBuffer::~CIndexBuffer()
 //	Loads index data into OpenGL element array buffer
 //
 //------------------------------------------------------------------
-bool CIndexBuffer::LoadData(GLuint* pIndexData, GLuint indexCount)
+ErrorId CIndexBuffer::LoadData(GLuint* pIndexData, GLuint indexCount)
 {
-	bool result = false;
+	if (pIndexData == nullptr)
+		return ERRORID_GFX_INDEX_BUFFER_NULL_DATA;
 
-	if (pIndexData != nullptr && indexCount != 0)
+	if (indexCount == 0)
+		return ERRORID_GFX_INDEX_BUFFER_ZERO_INDEX_COUNT;
+
+
+	m_idxCount = indexCount;
+
+	glGenBuffers(1, &m_elementBuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_elementBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_idxCount * sizeof(glm::uint32), pIndexData, GL_STATIC_DRAW);
+
+	if (glGetError() != GL_NO_ERROR)
 	{
-		m_idxCount = indexCount;
-
-		glGenBuffers(1, &m_elementBuffer);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_elementBuffer);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_idxCount * sizeof(glm::uint32), pIndexData, GL_STATIC_DRAW);
-
-		if (glGetError() != GL_NO_ERROR)
-		{
-			glDeleteBuffers(1, &m_elementBuffer);
-			m_idxCount = 0;
-			m_elementBuffer = 0;
-			result = false;
-		}
-		else
-		{
-			result = true;
-			m_bLoadedData = true;
-		}
-
+		glDeleteBuffers(1, &m_elementBuffer);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		m_idxCount = 0;
+		m_elementBuffer = 0;
+		return ERRORID_GFX_INDEX_BUFFER_CREATE_FAILED;
 	}
 
-	return result;
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	m_bLoadedData = true;
+	
+	return ERRORID_NONE;
 }
 
 

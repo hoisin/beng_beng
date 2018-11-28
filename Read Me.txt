@@ -233,7 +233,8 @@ Refactor/revise work:
 
 Done stuff:
 - COpenGL & Tests
-
+- CVertexBuffer & Tests
+- CIndexBuffer & Tests
 
 
 

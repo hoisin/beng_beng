@@ -12,6 +12,7 @@
 #define __CINDEXBUFFER_H__
 
 #include "GfxDefs.h"
+#include "Errors.h"
 
 class CIndexBuffer
 {
@@ -20,7 +21,7 @@ public:
 	CIndexBuffer(const CIndexBuffer& other);
 	~CIndexBuffer();
 
-	bool LoadData(GLuint* pIndexData, GLuint indexCount);
+	ErrorId LoadData(GLuint* pIndexData, GLuint indexCount);
 
 	void UseBuffer();
 

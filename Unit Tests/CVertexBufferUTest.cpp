@@ -52,7 +52,8 @@ TEST_F(CVertexBufferUTest, LoadBufferData)
 
 			EXPECT_EQ(false, vertexBuffer.IsLoadedData()) << "Expected loaded data to be false when not loaded yet!";
 
-			EXPECT_EQ(true, vertexBuffer.LoadData(pVerts, vertexCount, eVertexPNT)) << "Failed to load vertex data";
+			ErrorId error = vertexBuffer.LoadData(pVerts, vertexCount, eVertexPNT);
+			EXPECT_EQ(ERRORID_NONE, error) << "Failed to load vertex data";
 			EXPECT_EQ(true, vertexBuffer.IsLoadedData()) << "Expected loaded data to be true after loading!";
 
 			EXPECT_EQ(vertexCount, vertexBuffer.GetVertexCount()) << "Unexpected vertex count";
@@ -65,9 +66,12 @@ TEST_F(CVertexBufferUTest, LoadBufferData)
 			EXPECT_EQ(0, vertexBuffer.GetVertexBufferObjCount()) << "Expected buffer object count to be 0 after unload";
 
 			// Invalid load
-			EXPECT_EQ(false, vertexBuffer.LoadData(nullptr, vertexCount, eVertexPNT)) << "Expected load to fail with null data pointer";
-			EXPECT_EQ(false, vertexBuffer.LoadData(pVerts, 0, eVertexPNT)) << "Expected load to fail on 0 vertex count";
-			EXPECT_EQ(false, vertexBuffer.LoadData(pVerts, vertexCount, eVertexUnknown)) << "Expected load to fail on unknown vertex type";
+			error = vertexBuffer.LoadData(nullptr, vertexCount, eVertexPNT);
+			EXPECT_EQ(ERRORID_GFX_VERTEX_BUFFER_NULL_DATA, error) << "Expected load to fail with null data pointer";
+			error = vertexBuffer.LoadData(pVerts, 0, eVertexPNT);
+			EXPECT_EQ(ERRORID_GFX_VERTEX_BUFFER_ZERO_VERTEX_COUNT, error) << "Expected load to fail on 0 vertex count";
+			error = vertexBuffer.LoadData(pVerts, vertexCount, eVertexUnknown);
+			EXPECT_EQ(ERRORID_GFX_VERTEX_BUFFER_UNKNOWN_VERTEXTYPE, error) << "Expected load to fail on unknown vertex type";
 
 			delete[] pVerts;
 			pVerts = nullptr;

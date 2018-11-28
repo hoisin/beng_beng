@@ -27,7 +27,7 @@ public:
 	CMesh(const CMesh& other);
 	~CMesh();
 
-	bool LoadMesh(MeshData* pData, const std::string& materialID);
+	ErrorId LoadMesh(MeshData* pData, const std::string& materialID);
 
 	bool IsLoaded() const;
 	const std::string& GetMaterialID();

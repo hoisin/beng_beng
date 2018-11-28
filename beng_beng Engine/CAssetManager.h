@@ -46,9 +46,9 @@ public:
 
 	// Create models
 	bool LoadModel(const std::string& fileDir, const std::string& fileName, const std::string& modelID);
-	bool CreateModelCube(int size, int subDiv, EVertexType vertType, const std::string& modelID, const std::string& materialID);
-	bool CreateModeSphere(int size, int subDiv, EVertexType vertType, const std::string& modelID, const std::string& materialID);
-	bool CreateModelPlane(int size, int subDiv, EVertexType vertType, const std::string& modelID, const std::string& materialID);
+	ErrorId CreateModelCube(int size, int subDiv, EVertexType vertType, const std::string& modelID, const std::string& materialID);
+	ErrorId CreateModeSphere(int size, int subDiv, EVertexType vertType, const std::string& modelID, const std::string& materialID);
+	ErrorId CreateModelPlane(int size, int subDiv, EVertexType vertType, const std::string& modelID, const std::string& materialID);
 
 	// Generating/loading mesh data
 	//	- Load/Generating mesh data CPU side
@@ -67,7 +67,7 @@ public:
 	bool CreateModel(const std::string& modelID);
 	CModel* GetModel(const std::string& modelID);
 
-	bool AddMeshToModel(const std::string& modelID, const std::string& meshDataID,
+	ErrorId AddMeshToModel(const std::string& modelID, const std::string& meshDataID,
 		const std::string& meshMaterialID);
 
 protected:

@@ -26,7 +26,7 @@ public:
 	CModel(const std::string meshID);
 	~CModel(void);
 
-	bool AddMesh(MeshData* pData, const std::string& materialID);
+	ErrorId AddMesh(MeshData* pData, const std::string& materialID);
 
 	CMesh* GetMesh(GLuint index);
 	int GetMeshCount() const;

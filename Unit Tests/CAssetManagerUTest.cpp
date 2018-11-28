@@ -89,8 +89,11 @@ TEST_F(CAssetManagerUTest, ManagerTest)
 				EXPECT_NE(nullptr, ASSETMGR->GetModel(testModelID)) << "Unexpected null ptr on get model";
 
 				// Atttempt to add mesh data to model to create a mesh for the model
-				EXPECT_EQ(true, ASSETMGR->AddMeshToModel(testModelID, testMeshCube, testMaterialID)) << "Failed to add mesh to model";
-				EXPECT_EQ(true, ASSETMGR->AddMeshToModel(testModelID, testMeshPlane, testMaterialID)) << "Failed to add mesh to model";
+
+				error = ASSETMGR->AddMeshToModel(testModelID, testMeshCube, testMaterialID);
+				EXPECT_EQ(ERRORID_NONE, error) << "Failed to add mesh to model";
+				error = ASSETMGR->AddMeshToModel(testModelID, testMeshPlane, testMaterialID);
+				EXPECT_EQ(ERRORID_NONE, error) << "Failed to add mesh to model";
 
 				// Test model creation methods.
 				// Removes the need to create mesh data and then linking them to a model (does it all in one)
@@ -103,9 +106,12 @@ TEST_F(CAssetManagerUTest, ManagerTest)
 				std::string modelFile = "Rabbit.obj";
 
 				EXPECT_EQ(true, ASSETMGR->LoadModel(modelDir, modelFile, modelCustom)) << "Failed to LoadModel()";
-				EXPECT_EQ(true, ASSETMGR->CreateModelCube(10, 2, eVertexPNT, modelCube, testMaterialID)) << "Failed to create Cube model";
-				EXPECT_EQ(true, ASSETMGR->CreateModeSphere(10, 2, eVertexPNT, modelSphere, testMaterialID)) << "Failed to create sphere model";
-				EXPECT_EQ(true, ASSETMGR->CreateModelPlane(10, 2, eVertexPNT, modelPlane, testMaterialID)) << "Failed to create plane model";
+				error = ASSETMGR->CreateModelCube(10, 2, eVertexPNT, modelCube, testMaterialID);
+				EXPECT_EQ(ERRORID_NONE, error) << "Failed to create Cube model";
+				error = ASSETMGR->CreateModeSphere(10, 2, eVertexPNT, modelSphere, testMaterialID);
+				EXPECT_EQ(ERRORID_NONE, error) << "Failed to create sphere model";
+				error = ASSETMGR->CreateModelPlane(10, 2, eVertexPNT, modelPlane, testMaterialID);
+				EXPECT_EQ(ERRORID_NONE, error) << "Failed to create plane model";
 			}
 
 			// Close the AssetMgr instance
