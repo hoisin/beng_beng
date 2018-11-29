@@ -211,7 +211,7 @@ protected:
 };
 
 
-
+ 
 class CLightManager
 {
 public:
@@ -235,7 +235,9 @@ Done stuff:
 - COpenGL & Tests
 - CVertexBuffer & Tests
 - CIndexBuffer & Tests
-
+- CTechnique & Tests
+- CFwdRender & Tests
+- TextureLoaded & Tests
 
 
 

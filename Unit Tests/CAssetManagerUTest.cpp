@@ -52,7 +52,8 @@ TEST_F(CAssetManagerUTest, ManagerTest)
 				std::string vertexShaderPath = "..\\UTest Data\\Shaders\\texturePointVertexShader.vsh";
 				std::string fragmentShaderPath = "..\\UTest Data\\Shaders\\texturePointFragmentShader.fsh";
 
-				EXPECT_EQ(true, ASSETMGR->LoadTechnique(vertexShaderPath, fragmentShaderPath)) << "Failed to load technique";
+				error = ASSETMGR->LoadTechnique(vertexShaderPath, fragmentShaderPath);
+				EXPECT_EQ(ERRORID_NONE, error) << "Failed to load technique";
 				EXPECT_NE(nullptr, ASSETMGR->GetFwdRenderTech()) << "Should not return nullptr after successful LoadTechnique";
 
 				// Test loading textures

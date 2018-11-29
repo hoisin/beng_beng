@@ -74,14 +74,11 @@ void CAssetManager::ShutDown()
 //	Supports only one currenty which is FwdRender
 //
 //------------------------------------------------------------------
-bool CAssetManager::LoadTechnique(const std::string& vertexShaderFile,
+ErrorId CAssetManager::LoadTechnique(const std::string& vertexShaderFile,
 	const std::string& fragmentShaderFile)
 {
 	m_fwdRender = CFwdRender(vertexShaderFile, fragmentShaderFile);
-	if (!m_fwdRender.VInit())
-		return false;
-
-	return true;
+	return m_fwdRender.VInit();
 }
 
 //------------------------------------------------------------------

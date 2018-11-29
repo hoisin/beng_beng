@@ -32,7 +32,7 @@ public:
 
 	// Load shader
 	// Only one at the moment. Potentially another if deferred
-	bool LoadTechnique(const std::string& vertexShaderFile,
+	ErrorId LoadTechnique(const std::string& vertexShaderFile,
 		const std::string& fragmentShaderFile);
 
 	// Material loading

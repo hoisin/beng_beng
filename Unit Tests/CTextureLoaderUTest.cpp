@@ -130,6 +130,10 @@ TEST_F(CTextureLoaderUTest, LoadTexture)
 			error = textureLoader.LoadFile("", textureWidth, textureHeight, textureFormat,
 				bytesPerPixel, &pTextureTGA);
 			EXPECT_EQ(ERRORID_GFX_TEXTURE_LOAD_UNKNOWN_FORMAT, error) << "Expected unknown format error on loading null string";
+
+			error = textureLoader.LoadFile("NoFile.bmp", textureWidth, textureHeight, textureFormat,
+				bytesPerPixel, &pTextureBMP);
+			EXPECT_EQ(ERRORID_GFX_TEXTURE_LOAD_FAILED, error) << "Expected load texture failure error";
 		}
 	}
 }

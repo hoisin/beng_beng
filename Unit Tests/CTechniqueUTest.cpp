@@ -45,8 +45,8 @@ TEST_F(CTechniqueUTest, Initialise)
 		if (!IsError(error))
 		{
 			CTechnique testShader;
-			result = testShader.VInit();
-			EXPECT_EQ(true, result) << "Failed to initialise";
+			error = testShader.VInit();
+			EXPECT_EQ(ERRORID_NONE, error) << "Failed to initialise";
 		}
 	}
 }

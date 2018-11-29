@@ -82,7 +82,7 @@ ErrorId CTextureLoader::LoadFile(const std::string &fileName, unsigned int &outW
 		return ERRORID_GFX_TEXTURE_LOAD_UNKNOWN_FORMAT;
 
 	// check that the pluging has reading capabilities and load the file
-	if(FreeImage_FIFSupportsReading(fif))
+	if (FreeImage_FIFSupportsReading(fif))
 		dib = FreeImage_Load(fif, fileName.c_str());
 
 	// If the image failed to load, return fail
