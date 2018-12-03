@@ -29,14 +29,15 @@ TEST_F(CMaterialManagerUTest, AddGetMaterial)
 	bool result = false;
 	int totalMaterials = 10;
 	std::vector<CMaterial> materials;
+	ErrorId error;
 
 	// Test Adding
 	for (int i = 0; i < totalMaterials; i++) 
 	{
 		std::string stringID = "testMaterial_" + std::to_string(i + 1);
 		CMaterial newMaterial;
-		result = m_materialMgr.AddMaterial(stringID, newMaterial);
-		EXPECT_EQ(true, result) << "Failed to add material";
+		error = m_materialMgr.AddMaterial(stringID, newMaterial);
+		EXPECT_EQ(ERRORID_NONE, error) << "Failed to add material";
 	}
 
 	// Test getting
@@ -49,8 +50,8 @@ TEST_F(CMaterialManagerUTest, AddGetMaterial)
 
 	// Duplicate add
 	CMaterial tempMaterial;
-	result = m_materialMgr.AddMaterial("testMaterial_1", tempMaterial);
-	EXPECT_EQ(false, result) << "Expected fail on adding duplicate material ID";
+	error = m_materialMgr.AddMaterial("testMaterial_1", tempMaterial);
+	EXPECT_EQ(ERRORID_MATERIAL_ID_DUPLICATE, error) << "Expected fail on adding duplicate material ID";
 
 	// Get non-existing material
 	CMaterial* pTestMaterial = m_materialMgr.GetMaterial("NoMaterial");

@@ -41,11 +41,10 @@ TEST_F(CAssetManagerUTest, ManagerTest)
 	{
 		ErrorId error = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
 		EXPECT_EQ(ERRORID_NONE, error) << "Failed to initialise OpenGL";
-		if (!IsError(error))
+		if (IsNoError(error))
 		{
 			// Initialise asset maanger
 			result = ASSETMGR->Initialise();
-
 			if (result)
 			{
 				// Test loading shader
@@ -60,13 +59,15 @@ TEST_F(CAssetManagerUTest, ManagerTest)
 				std::string testTexturePath = "..\\UTest Data\\Textures\\test.bmp";
 				std::string textureID = "MyTexture";
 
-				EXPECT_EQ(true, ASSETMGR->LoadTexture(testTexturePath, textureID)) << "Failed to load texture: " + testTexturePath;
+				error = ASSETMGR->LoadTexture(testTexturePath, textureID);
+				EXPECT_EQ(ERRORID_NONE, error) << "Failed to load texture: " + testTexturePath;
 				EXPECT_NE(nullptr, ASSETMGR->GetTexture(textureID)) << "Should not return nullptr after LoadTexture";
 
 				// Test adding materials
 				CMaterial testMaterial;
 				std::string testMaterialID = "MyMaterial";
-				EXPECT_EQ(true, ASSETMGR->AddMaterial(testMaterial, testMaterialID)) << "Failed to add material";
+				error = ASSETMGR->AddMaterial(testMaterial, testMaterialID);
+				EXPECT_EQ(ERRORID_NONE, error) << "Failed to add material";
 				EXPECT_NE(nullptr, ASSETMGR->GetMaterial(testMaterialID)) << "Should not return nullptr after AddMaterial";
 
 				// Can't test LoadModelMeshData yet....

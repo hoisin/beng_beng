@@ -72,7 +72,7 @@ TEST_F(CTexture2DUTest, LoadTexture)
 				{
 					error = testTexture2D.LoadTexture(width, height, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE, pTextureData);
 					EXPECT_EQ(ERRORID_NONE, error) << "Failed to load texture to GPU";
-					if (result)
+					if (IsNoError(error))
 					{
 						EXPECT_EQ(testTextureID, testTexture2D.GetID()) << "Unexpected ID";
 						testTexture2D.CleanUp();

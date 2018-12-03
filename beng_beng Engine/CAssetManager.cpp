@@ -92,14 +92,9 @@ ErrorId CAssetManager::LoadTechnique(const std::string& vertexShaderFile,
 //	Loads specified texture file 
 //
 //------------------------------------------------------------------
-bool CAssetManager::LoadTexture(const std::string & fileName, const std::string & textureID)
+ErrorId CAssetManager::LoadTexture(const std::string & fileName, const std::string & textureID)
 {
-	if (!m_textureMgr.LoadTexture(textureID, fileName)) {
-		// Should report some error?
-		return false;
-	}
-
-	return true;
+	return m_textureMgr.LoadTexture(textureID, fileName);
 }
 
 //------------------------------------------------------------------
@@ -128,11 +123,9 @@ CTexture2D* CAssetManager::GetTexture(const std::string & textureID)
 //	Adds a material  
 //
 //------------------------------------------------------------------
-bool CAssetManager::AddMaterial(const CMaterial& material, const std::string & materialID)
+ErrorId CAssetManager::AddMaterial(const CMaterial& material, const std::string & materialID)
 {
-	m_materialMgr.AddMaterial(materialID, material);
-
-	return true;
+	return m_materialMgr.AddMaterial(materialID, material);
 }
 
 //------------------------------------------------------------------

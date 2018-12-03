@@ -38,10 +38,10 @@ public:
 	// Material loading
 	// - Involves loading texture
 	// - Load/creating shader params + linking texture
-	bool LoadTexture(const std::string& fileName, const std::string& textureID);
+	ErrorId LoadTexture(const std::string& fileName, const std::string& textureID);
 	CTexture2D* GetTexture(const std::string& textureID);
 
-	bool AddMaterial(const CMaterial& material, const std::string& materialID);
+	ErrorId AddMaterial(const CMaterial& material, const std::string& materialID);
 	CMaterial* GetMaterial(const std::string& materialID);
 
 	// Create models

@@ -237,7 +237,30 @@ Done stuff:
 - CIndexBuffer & Tests
 - CTechnique & Tests
 - CFwdRender & Tests
-- TextureLoaded & Tests
+- TextureLoadeder & Tests
+- Texture2D & Tests
+- TextureManager & tests
+- MaterialMgr & tests
+- Material (No change required)
+- CMesh (No change)
+- CModel (No change)
+- CModelManager (No change).
+- CRenderer & tests
+
+- Graphics Done
+
+- CBaseApp (No change)
+- CDerviedClass (No change).
+
+
+
+
+
+- Review camera code ************
+
+
+
+
 
 
 

@@ -28,7 +28,7 @@ CMaterialManager::~CMaterialManager(void)
 //	Adds a defined material
 //
 //------------------------------------------------------------------
-bool CMaterialManager::AddMaterial(const std::string& materialID, const CMaterial& material)
+ErrorId CMaterialManager::AddMaterial(const std::string& materialID, const CMaterial& material)
 {
 	auto it = m_materialIndexMap.find(materialID);
 
@@ -36,10 +36,10 @@ bool CMaterialManager::AddMaterial(const std::string& materialID, const CMateria
 	if (it == m_materialIndexMap.end()) {
 		m_materials.push_back(material);
 		m_materialIndexMap.insert(std::pair<std::string, int>(materialID, (int)m_materials.size() - 1));
-		return true;
+		return ERRORID_NONE;
 	}
 
-	return false;
+	return ERRORID_MATERIAL_ID_DUPLICATE;
 }
 
 //------------------------------------------------------------------
