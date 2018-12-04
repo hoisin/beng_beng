@@ -79,7 +79,7 @@ void CPlayerView::VUpdate(float deltaT)
 		}
 
 		float moveAmt = 4;
-
+		//cam->MoveBack(moveAmt);
 		// Keyboard handling
 		if (m_keyboard.IsKeyDown(VK_LEFT) || m_keyboard.IsKeyHeld(VK_LEFT))
 		{

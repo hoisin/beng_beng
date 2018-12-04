@@ -14,6 +14,7 @@
 
 #include <map>
 #include <vector>
+#include "Errors.h"
 #include "GfxDefs.h"
 #include "CMeshDataGenerator.h"
 
@@ -27,18 +28,18 @@ public:
 	// For when adding loading mesh data from external file.
 	// A interface will be required to generate the mesh data from reading a mesh data file of 'N' format.
 	// This will create a copy of the passed in input
-	bool AddMeshData(MeshData* pNewMeshData, const std::string& meshDataID);
+	ErrorId AddMeshData(MeshData* pNewMeshData, const std::string& meshDataID);
 
 	// Procedurally generated mesh data
-	bool CreatePlane(const std::string& geometryID, float size, EVertexType type, unsigned int subDivisions = 1,
+	ErrorId CreatePlane(const std::string& geometryID, float size, EVertexType type, unsigned int subDivisions = 1,
 		const glm::vec4& colour = glm::vec4(0, 0, 0, 0));
-	bool CreateCube(const std::string& geometryID, float size, EVertexType type, unsigned int subDivisions = 1,
+	ErrorId CreateCube(const std::string& geometryID, float size, EVertexType type, unsigned int subDivisions = 1,
 		const glm::vec4& colour = glm::vec4(0, 0, 0, 0));
-	bool CreateSphere(const std::string& geometryID, float size, EVertexType type, unsigned int subDivisions = 1,
+	ErrorId CreateSphere(const std::string& geometryID, float size, EVertexType type, unsigned int subDivisions = 1,
 		const glm::vec4& colour = glm::vec4(0, 0, 0, 0));
 
 	MeshData* GetMeshData(const std::string& meshDataID);
-	bool RemoveMeshData(const std::string& meshDataID);
+	ErrorId RemoveMeshData(const std::string& meshDataID);
 
 	int GetMeshCount() const;
 

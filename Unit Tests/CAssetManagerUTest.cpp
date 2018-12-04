@@ -77,9 +77,12 @@ TEST_F(CAssetManagerUTest, ManagerTest)
 				std::string testMeshSphere = "MySphere";
 				std::string testMeshPlane = "MyPlane";
 
-				EXPECT_EQ(true, ASSETMGR->CreateCubeMeshData(10, 2, EVertexType::eVertexPNC, testMeshCube)) << "Failed to create cube mesh data";
-				EXPECT_EQ(true, ASSETMGR->CreateSphereMeshData(10, 2, EVertexType::eVertexPNC, testMeshSphere)) << "Failed to create sphere mesh data";
-				EXPECT_EQ(true, ASSETMGR->CreatePlaneMeshData(10, 2, EVertexType::eVertexPNC, testMeshPlane)) << "Failed to create plane mesh data";
+				error = ASSETMGR->CreateCubeMeshData(10, 2, EVertexType::eVertexPNC, testMeshCube);
+				EXPECT_EQ(ERRORID_NONE, error) << "Failed to create cube mesh data";
+				error = ASSETMGR->CreateSphereMeshData(10, 2, EVertexType::eVertexPNC, testMeshSphere);
+				EXPECT_EQ(ERRORID_NONE, error) << "Failed to create sphere mesh data";
+				error = ASSETMGR->CreatePlaneMeshData(10, 2, EVertexType::eVertexPNC, testMeshPlane);
+				EXPECT_EQ(ERRORID_NONE, error) << "Failed to create plane mesh data";
 
 				EXPECT_NE(nullptr, ASSETMGR->GetMeshData(testMeshCube)) << "Unexpected null ptr for Get test mesh data cube";
 				EXPECT_NE(nullptr, ASSETMGR->GetMeshData(testMeshSphere)) << "Unexpected null ptr for Get test mesh data sphere";
@@ -110,7 +113,7 @@ TEST_F(CAssetManagerUTest, ManagerTest)
 				EXPECT_EQ(true, ASSETMGR->LoadModel(modelDir, modelFile, modelCustom)) << "Failed to LoadModel()";
 				error = ASSETMGR->CreateModelCube(10, 2, eVertexPNT, modelCube, testMaterialID);
 				EXPECT_EQ(ERRORID_NONE, error) << "Failed to create Cube model";
-				error = ASSETMGR->CreateModeSphere(10, 2, eVertexPNT, modelSphere, testMaterialID);
+				error = ASSETMGR->CreateModelSphere(10, 2, eVertexPNT, modelSphere, testMaterialID);
 				EXPECT_EQ(ERRORID_NONE, error) << "Failed to create sphere model";
 				error = ASSETMGR->CreateModelPlane(10, 2, eVertexPNT, modelPlane, testMaterialID);
 				EXPECT_EQ(ERRORID_NONE, error) << "Failed to create plane model";

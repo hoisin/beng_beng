@@ -28,17 +28,23 @@ CMeshDataManager::~CMeshDataManager(void)
 //	The user is responsible for the passed in mesh data if it was created on the heap
 //
 //-------------------------------------------------------------------------------------
-bool CMeshDataManager::AddMeshData(MeshData* pNewMeshData, const std::string& meshDataID)
+ErrorId CMeshDataManager::AddMeshData(MeshData* pNewMeshData, const std::string& meshDataID)
 {
+	if (pNewMeshData == nullptr)
+		return ERRORID_MESHDATA_NULL_MESHDATA_PTR;
+
+	if (meshDataID == "")
+		return ERRORID_MESHDATA_ID_NULL;
+
 	// Already an entry with same ID, return false
-	if (ExistingMeshDataCheck(meshDataID) || meshDataID == "")
-		return false;
+	if (ExistingMeshDataCheck(meshDataID))
+		return ERRORID_MESHDATA_ID_DUPLICATE;
 
 	pNewMeshData->m_ID = meshDataID;
 
 	CalculateMinMaxBoundary(pNewMeshData);
 	m_meshDataVec.push_back(*pNewMeshData);
-	return true;
+	return ERRORID_NONE;
 }
 
 //-------------------------------------------------------------------------------------
@@ -56,11 +62,17 @@ bool CMeshDataManager::AddMeshData(MeshData* pNewMeshData, const std::string& me
 //	Creates a plane mesh
 //
 //-------------------------------------------------------------------------------------
-bool CMeshDataManager::CreatePlane(const std::string& geometryID, float size, EVertexType type, unsigned int subDivisions,
+ErrorId CMeshDataManager::CreatePlane(const std::string& geometryID, float size, EVertexType type, unsigned int subDivisions,
 	const glm::vec4& colour)
 {
-	if (ExistingMeshDataCheck(geometryID) || geometryID == "")
-		return false;
+	if (geometryID == "")
+		return ERRORID_MESHDATA_ID_NULL;
+
+	if (ExistingMeshDataCheck(geometryID))
+		return ERRORID_MESHDATA_ID_DUPLICATE;
+
+	if (size <= 0)
+		return ERRORID_MESHDATA_SHAPE_GENERATE_SIZE_ZERO;
 
 	MeshData* pNewPlaneMesh = m_meshDataGenerator.CreatePlane(geometryID, size, type, subDivisions, colour);
 	CalculateMinMaxBoundary(pNewPlaneMesh);
@@ -69,7 +81,7 @@ bool CMeshDataManager::CreatePlane(const std::string& geometryID, float size, EV
 	// Clean up 
 	delete pNewPlaneMesh;
 
-	return true;
+	return ERRORID_NONE;
 }
 
 //-------------------------------------------------------------------------------------
@@ -87,11 +99,17 @@ bool CMeshDataManager::CreatePlane(const std::string& geometryID, float size, EV
 //	Creates a cube mesh
 //
 //-------------------------------------------------------------------------------------
-bool CMeshDataManager::CreateCube(const std::string& geometryID, float size, EVertexType type, unsigned int subDivisions,
+ErrorId CMeshDataManager::CreateCube(const std::string& geometryID, float size, EVertexType type, unsigned int subDivisions,
 	const glm::vec4& colour)
 {
-	if (ExistingMeshDataCheck(geometryID) || geometryID == "")
-		return false;
+	if (geometryID == "")
+		return ERRORID_MESHDATA_ID_NULL;
+
+	if (ExistingMeshDataCheck(geometryID))
+		return ERRORID_MESHDATA_ID_DUPLICATE;
+
+	if (size <= 0)
+		return ERRORID_MESHDATA_SHAPE_GENERATE_SIZE_ZERO;
 
 	MeshData* pNewCubeMesh = m_meshDataGenerator.CreateCube(geometryID, size, type, subDivisions, colour);
 	CalculateMinMaxBoundary(pNewCubeMesh);
@@ -100,7 +118,7 @@ bool CMeshDataManager::CreateCube(const std::string& geometryID, float size, EVe
 	// Clean up
 	delete pNewCubeMesh;
 
-	return true;
+	return ERRORID_NONE;
 }
 
 //-------------------------------------------------------------------------------------
@@ -118,11 +136,17 @@ bool CMeshDataManager::CreateCube(const std::string& geometryID, float size, EVe
 //	Creates a sphere mesh
 //
 //-------------------------------------------------------------------------------------
-bool CMeshDataManager::CreateSphere(const std::string& geometryID, float size, EVertexType type, unsigned int subDivisions,
+ErrorId CMeshDataManager::CreateSphere(const std::string& geometryID, float size, EVertexType type, unsigned int subDivisions,
 		const glm::vec4& colour)
 {
-	if (ExistingMeshDataCheck(geometryID) || geometryID == "")
-		return false;
+	if (geometryID == "")
+		return ERRORID_MESHDATA_ID_NULL;
+
+	if (ExistingMeshDataCheck(geometryID))
+		return ERRORID_MESHDATA_ID_DUPLICATE;
+
+	if (size <= 0)
+		return ERRORID_MESHDATA_SHAPE_GENERATE_SIZE_ZERO;
 
 	MeshData* pNewSphereMesh = m_meshDataGenerator.CreateSphere(geometryID, size, type, subDivisions, colour);
 	CalculateMinMaxBoundary(pNewSphereMesh);
@@ -130,7 +154,7 @@ bool CMeshDataManager::CreateSphere(const std::string& geometryID, float size, E
 
 	delete pNewSphereMesh;
 
-	return true;
+	return ERRORID_NONE;
 }
 
 //-------------------------------------------------------------------------------------
@@ -165,18 +189,18 @@ MeshData* CMeshDataManager::GetMeshData(const std::string& meshDataID)
 //	Remove mesh from array
 //
 //-------------------------------------------------------------------------------------
-bool CMeshDataManager::RemoveMeshData(const std::string& meshDataID)
+ErrorId CMeshDataManager::RemoveMeshData(const std::string& meshDataID)
 {
 	for (int i = 0; i < (int)m_meshDataVec.size(); i++) {
 		if (m_meshDataVec[i].m_ID == meshDataID) {
 			std::swap(m_meshDataVec[i], m_meshDataVec.back());
 			m_meshDataVec.pop_back();
-			return true;
+			return ERRORID_NONE;
 		}
 	}
 
 	// else no such entry...
-	return false;
+	return ERRORID_MESHDATA_REMOVE_DATA_FAILED;
 }
 
 int CMeshDataManager::GetMeshCount() const

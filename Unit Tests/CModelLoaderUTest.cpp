@@ -35,11 +35,11 @@ TEST_F(CModelLoaderUTest, ModelLoad)
 	{
 		ErrorId error = m_app.InitOpenGL(m_majorVer, m_minorVer);
 		EXPECT_EQ(ERRORID_NONE, error) << "Failed to initialise OpenGL";
-		if (!IsError(error))
+		if (IsNoError(error))
 		{
-			result = m_modelLoader.Initialise(&m_meshDataMgr, &m_textureMgr, &m_materialMgr, &m_modelMgr);
-			EXPECT_EQ(result, true) << "Failed to initialise model loader";
-			if (result)
+			error = m_modelLoader.Initialise(&m_meshDataMgr, &m_textureMgr, &m_materialMgr, &m_modelMgr);
+			EXPECT_EQ(ERRORID_NONE, error) << "Failed to initialise model loader";
+			if (IsNoError(error))
 			{
 				std::string modelDir = "..\\UTest Data\\Models";
 				std::string modelFile = "Rabbit.obj";

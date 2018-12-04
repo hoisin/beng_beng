@@ -298,8 +298,11 @@ void CApp::CalculateFrameStats()
 //------------------------------------------------------------------
 bool CApp::OnLoadAssets()
 {
+	ErrorId error;
 	// Load shaders
-	ASSETMGR->LoadTechnique("..\\Shaders\\texturePointVertexShader.vsh", "..\\Shaders\\texturePointFragmentShader.fsh");
+	error = ASSETMGR->LoadTechnique("..\\Shaders\\texturePointVertexShader.vsh", "..\\Shaders\\texturePointFragmentShader.fsh");
+	if (IsError(error))
+		return error;
 
 	// Load textures
 	std::string myTextureTest = "..\\Textures\\test.bmp";
@@ -308,8 +311,13 @@ bool CApp::OnLoadAssets()
 	std::string testTextureID = "Test_1";
 	std::string planeTextureID = "Plane_1";
 
-	ASSETMGR->LoadTexture(myTextureTest, testTextureID);
-	ASSETMGR->LoadTexture(myTexturePlane, planeTextureID);
+	error = ASSETMGR->LoadTexture(myTextureTest, testTextureID);
+	if (IsError(error))
+		return error;
+
+	error = ASSETMGR->LoadTexture(myTexturePlane, planeTextureID);
+	if (IsError(error))
+		return error;
 
 	// Load materials
 	std::string myMaterialID_1 = "material_1";
@@ -318,11 +326,15 @@ bool CApp::OnLoadAssets()
 	// Material 1
 	CMaterial tempMaterial;
 	tempMaterial.m_diffuseTextureID = testTextureID;
-	ASSETMGR->AddMaterial(tempMaterial, myMaterialID_1);
+	error = ASSETMGR->AddMaterial(tempMaterial, myMaterialID_1);
+	if (IsError(error))
+		return error;
 
 	// Material 2
 	tempMaterial.m_diffuseTextureID = planeTextureID;
-	ASSETMGR->AddMaterial(tempMaterial, myMaterialID_2);
+	error = ASSETMGR->AddMaterial(tempMaterial, myMaterialID_2);
+	if (IsError(error))
+		return error;
 
 	// Create models
 	std::string modelCube_1 = "cube_1";
@@ -330,11 +342,21 @@ bool CApp::OnLoadAssets()
 	std::string modelSphere_1 = "sphere_1";
 	std::string modelPlane_1 = "plane_1";
 	
-	ASSETMGR->LoadModel("..\\Models\\Rabbit", "Rabbit.obj", modelCube_1);
+	if (!ASSETMGR->LoadModel("..\\Models\\Rabbit", "Rabbit.obj", modelCube_1))
+		return false;
+
 	//ASSETMGR->CreateModelCube(48, 3, eVertexPNT, modelCube_1, myMaterialID_1);
-	ASSETMGR->CreateModelCube(6, 2, eVertexPNT, modelCube_2, myMaterialID_1);
-	ASSETMGR->CreateModeSphere(3, 10, eVertexPNT, modelSphere_1, myMaterialID_1);
-	ASSETMGR->CreateModelPlane(250, 10, eVertexPNT, modelPlane_1, myMaterialID_2);
+	error = ASSETMGR->CreateModelCube(6, 2, eVertexPNT, modelCube_2, myMaterialID_1);
+	if (IsError(error))
+		return error;
+
+	error =	ASSETMGR->CreateModelSphere(3, 10, eVertexPNT, modelSphere_1, myMaterialID_1);
+	if (IsError(error))
+		return error;
+
+	error = ASSETMGR->CreateModelPlane(250, 10, eVertexPNT, modelPlane_1, myMaterialID_2);
+	if (IsError(error))
+		return error;
 
 	return true;
 }

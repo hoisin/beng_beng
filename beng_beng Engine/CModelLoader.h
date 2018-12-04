@@ -30,7 +30,7 @@ public:
 	CModelLoader();
 	~CModelLoader();
 
-	bool Initialise(CMeshDataManager* pMeshMgr, CTextureManager* pTextureMgr, 
+	ErrorId Initialise(CMeshDataManager* pMeshMgr, CTextureManager* pTextureMgr, 
 		CMaterialManager* pMaterialMgr, CModelManager* pModelMgr);
 
 	CModel* Load(const std::string& fileDir, const std::string& fileName, const std::string modelID);

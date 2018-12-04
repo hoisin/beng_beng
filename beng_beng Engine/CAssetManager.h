@@ -47,7 +47,7 @@ public:
 	// Create models
 	bool LoadModel(const std::string& fileDir, const std::string& fileName, const std::string& modelID);
 	ErrorId CreateModelCube(int size, int subDiv, EVertexType vertType, const std::string& modelID, const std::string& materialID);
-	ErrorId CreateModeSphere(int size, int subDiv, EVertexType vertType, const std::string& modelID, const std::string& materialID);
+	ErrorId CreateModelSphere(int size, int subDiv, EVertexType vertType, const std::string& modelID, const std::string& materialID);
 	ErrorId CreateModelPlane(int size, int subDiv, EVertexType vertType, const std::string& modelID, const std::string& materialID);
 
 	// Generating/loading mesh data
@@ -55,9 +55,9 @@ public:
 	//
 	// These are to be replaced by model creation functions.
 	// But keeping them here for now. Avoid using them directly
-	bool CreateCubeMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID);
-	bool CreateSphereMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID);
-	bool CreatePlaneMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID);
+	ErrorId CreateCubeMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID);
+	ErrorId CreateSphereMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID);
+	ErrorId CreatePlaneMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID);
 
 	MeshData* GetMeshData(const std::string& meshDataID);
 

@@ -18,11 +18,9 @@ CModelLoader::~CModelLoader()
 	m_pModelMgr = nullptr;
 }
 
-bool CModelLoader::Initialise(CMeshDataManager * pMeshMgr, CTextureManager * pTextureMgr, 
+ErrorId CModelLoader::Initialise(CMeshDataManager * pMeshMgr, CTextureManager * pTextureMgr,
 	CMaterialManager * pMaterialMgr, CModelManager* pModelMgr)
 {
-	bool result = true;
-
 	// Don't init if already initialised
 	if (!m_bInit)
 	{
@@ -33,7 +31,7 @@ bool CModelLoader::Initialise(CMeshDataManager * pMeshMgr, CTextureManager * pTe
 		m_bInit = true;
 	}
 
-	return result;
+	return ERRORID_NONE;
 }
 
 CModel * CModelLoader::Load(const std::string & fileDir, const std::string& fileName, const std::string modelID)
@@ -66,20 +64,30 @@ CModel * CModelLoader::Load(const std::string & fileDir, const std::string& file
 					material->Get(AI_MATKEY_NAME, materialName);
 
 					CMaterial newMaterial;
-
+					ErrorId error;
 					// Diffuse texture
-					if (texturePath.C_Str() != "") {
-						if(m_pTextureMgr->LoadTexture(std::string(materialName.C_Str()) + "_diffuse", fileDir + "\\" + std::string(texturePath.C_Str())))
+					if (texturePath.length != 0) 
+					{
+						error = m_pTextureMgr->LoadTexture(std::string(materialName.C_Str()) + "_diffuse", fileDir + "\\" + std::string(texturePath.C_Str()));
+						if (IsNoError(error))
 							newMaterial.SetDiffuseTextureID(std::string(materialName.C_Str()) + "_diffuse");
+						else
+							return nullptr;
 					}
 
 					// Normal map texture
-					if (bumpTexturePath.C_Str() != "") {
-						if(m_pTextureMgr->LoadTexture(std::string(materialName.C_Str()) + "_normal", fileDir + "\\" + std::string(bumpTexturePath.C_Str())))
+					if (bumpTexturePath.length != 0) 
+					{
+						error = m_pTextureMgr->LoadTexture(std::string(materialName.C_Str()) + "_normal", fileDir + "\\" + std::string(bumpTexturePath.C_Str()));
+						if(IsNoError(error))
 							newMaterial.SetNormalMapTextureID(std::string(materialName.C_Str()) + "_normal");
+						else
+							return nullptr;
 					}
 
-					m_pMaterialMgr->AddMaterial(std::to_string(mat), newMaterial);
+					error = m_pMaterialMgr->AddMaterial(std::to_string(mat), newMaterial);
+					if (IsError(error))
+						return nullptr;
 				}
 			}
 
