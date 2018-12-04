@@ -74,14 +74,11 @@ void CAssetManager::ShutDown()
 //	Supports only one currenty which is FwdRender
 //
 //------------------------------------------------------------------
-bool CAssetManager::LoadTechnique(const std::string& vertexShaderFile,
+ErrorId CAssetManager::LoadTechnique(const std::string& vertexShaderFile,
 	const std::string& fragmentShaderFile)
 {
 	m_fwdRender = CFwdRender(vertexShaderFile, fragmentShaderFile);
-	if (!m_fwdRender.VInit())
-		return false;
-
-	return true;
+	return m_fwdRender.VInit();
 }
 
 //------------------------------------------------------------------
@@ -95,14 +92,9 @@ bool CAssetManager::LoadTechnique(const std::string& vertexShaderFile,
 //	Loads specified texture file 
 //
 //------------------------------------------------------------------
-bool CAssetManager::LoadTexture(const std::string & fileName, const std::string & textureID)
+ErrorId CAssetManager::LoadTexture(const std::string & fileName, const std::string & textureID)
 {
-	if (!m_textureMgr.LoadTexture(textureID, fileName)) {
-		// Should report some error?
-		return false;
-	}
-
-	return true;
+	return m_textureMgr.LoadTexture(textureID, fileName);
 }
 
 //------------------------------------------------------------------
@@ -131,11 +123,9 @@ CTexture2D* CAssetManager::GetTexture(const std::string & textureID)
 //	Adds a material  
 //
 //------------------------------------------------------------------
-bool CAssetManager::AddMaterial(const CMaterial& material, const std::string & materialID)
+ErrorId CAssetManager::AddMaterial(const CMaterial& material, const std::string & materialID)
 {
-	m_materialMgr.AddMaterial(materialID, material);
-
-	return true;
+	return m_materialMgr.AddMaterial(materialID, material);
 }
 
 //------------------------------------------------------------------
@@ -176,49 +166,58 @@ bool CAssetManager::LoadModel(const std::string& fileDir, const std::string& fil
 	return result;
 }
 
-bool CAssetManager::CreateModelCube(int size, int subDiv, EVertexType vertType, const std::string & modelID, const std::string& materialID)
+ErrorId CAssetManager::CreateModelCube(int size, int subDiv, EVertexType vertType, const std::string & modelID, const std::string& materialID)
 {
-	bool result = m_meshDataMgr.CreateCube(modelID, size, vertType, subDiv);
-
-	if (result) 
-	{
-		CModel* pNewModel = m_modelMgr.CreateModel(modelID);
-		if (pNewModel != nullptr) 
-			result = pNewModel->AddMesh(m_meshDataMgr.GetMeshData(modelID), materialID);
-		// Else Remove the created mesh data?
-	}
-
-	return result;
-}
-
-bool CAssetManager::CreateModeSphere(int size, int subDiv, EVertexType vertType, const std::string & modelID, const std::string& materialID)
-{
-	bool result = m_meshDataMgr.CreateSphere(modelID, size, vertType, subDiv);
-
-	if (result)
+	ErrorId error = m_meshDataMgr.CreateCube(modelID, (float)size, vertType, subDiv);
+	if (IsNoError(error)) 
 	{
 		CModel* pNewModel = m_modelMgr.CreateModel(modelID);
 		if (pNewModel != nullptr)
-			result = pNewModel->AddMesh(m_meshDataMgr.GetMeshData(modelID), materialID);
-		// Else Remove the created mesh data?
+			error = pNewModel->AddMesh(m_meshDataMgr.GetMeshData(modelID), materialID);
+		else
+		{
+			m_meshDataMgr.RemoveMeshData(modelID);
+			return ERRORID_ASSET_CREATESHAPE_FAILED;
+		}
 	}
 
-	return result;
+	return error;
 }
 
-bool CAssetManager::CreateModelPlane(int size, int subDiv, EVertexType vertType, const std::string & modelID, const std::string& materialID)
+ErrorId CAssetManager::CreateModelSphere(int size, int subDiv, EVertexType vertType, const std::string & modelID, const std::string& materialID)
 {
-	bool result = m_meshDataMgr.CreatePlane(modelID, size, vertType, subDiv);
-
-	if (result)
+	ErrorId error = m_meshDataMgr.CreateSphere(modelID, (float)size, vertType, subDiv);
+	if (IsNoError(error))
 	{
 		CModel* pNewModel = m_modelMgr.CreateModel(modelID);
 		if (pNewModel != nullptr)
-			result = pNewModel->AddMesh(m_meshDataMgr.GetMeshData(modelID), materialID);
-		// Else Remove the created mesh data?
+			error = pNewModel->AddMesh(m_meshDataMgr.GetMeshData(modelID), materialID);
+		else
+		{
+			m_meshDataMgr.RemoveMeshData(modelID);
+			return ERRORID_ASSET_CREATESHAPE_FAILED;
+		}
 	}
 
-	return result;
+	return error;
+}
+
+ErrorId CAssetManager::CreateModelPlane(int size, int subDiv, EVertexType vertType, const std::string & modelID, const std::string& materialID)
+{
+	ErrorId error = m_meshDataMgr.CreatePlane(modelID, (float)size, vertType, subDiv);
+	if (IsNoError(error))
+	{
+		CModel* pNewModel = m_modelMgr.CreateModel(modelID);
+		if (pNewModel != nullptr)
+			error = pNewModel->AddMesh(m_meshDataMgr.GetMeshData(modelID), materialID);
+		else
+		{
+			m_meshDataMgr.RemoveMeshData(modelID);
+			return ERRORID_ASSET_CREATESHAPE_FAILED;
+		}
+	}
+
+	return error;
 }
 
 //------------------------------------------------------------------
@@ -234,7 +233,7 @@ bool CAssetManager::CreateModelPlane(int size, int subDiv, EVertexType vertType,
 //	Creates cube mesh data
 //
 //------------------------------------------------------------------
-bool CAssetManager::CreateCubeMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID)
+ErrorId CAssetManager::CreateCubeMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID)
 {
 	return m_meshDataMgr.CreateCube(meshDataID, (float)size, vertType, subDiv);
 }
@@ -252,7 +251,7 @@ bool CAssetManager::CreateCubeMeshData(int size, int subDiv, EVertexType vertTyp
 //	Creates sphere mesh data
 //
 //------------------------------------------------------------------
-bool CAssetManager::CreateSphereMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID)
+ErrorId CAssetManager::CreateSphereMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID)
 {
 	return m_meshDataMgr.CreateSphere(meshDataID, (float)size, vertType, subDiv);
 }
@@ -270,7 +269,7 @@ bool CAssetManager::CreateSphereMeshData(int size, int subDiv, EVertexType vertT
 //	Creates plane mesh data
 //
 //------------------------------------------------------------------
-bool CAssetManager::CreatePlaneMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID)
+ErrorId CAssetManager::CreatePlaneMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID)
 {
 	return m_meshDataMgr.CreatePlane(meshDataID, (float)size, vertType, subDiv);
 }
@@ -353,7 +352,7 @@ CModel * CAssetManager::GetModel(const std::string & modelID)
 //  to CModel. Material ID is assigned to the new CMesh.
 //
 //------------------------------------------------------------------
-bool CAssetManager::AddMeshToModel(const std::string & modelID, const std::string & meshDataID,
+ErrorId CAssetManager::AddMeshToModel(const std::string & modelID, const std::string & meshDataID,
 	const std::string& meshMaterialID)
 {
 	CModel* pModel = m_modelMgr.GetModel(modelID);
@@ -364,6 +363,6 @@ bool CAssetManager::AddMeshToModel(const std::string & modelID, const std::strin
 			return pModel->AddMesh(pData, meshMaterialID);
 		
 	}
-	return false;
+	return ERRORID_NONE; // CHANGE THIS!!!!!!!!!!!!!!!!!
 }
 

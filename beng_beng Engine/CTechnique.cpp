@@ -32,15 +32,18 @@ CTechnique::~CTechnique()
 //	and then add custom behaviour.
 //
 //------------------------------------------------------------------
-bool CTechnique::VInit()
+ErrorId CTechnique::VInit()
 {
 	m_bInit = true;
 	m_shaderProg = glCreateProgram();
 
 	if (m_shaderProg == 0)
+	{
 		m_bInit = false;
+		return ERRORID_SHADER_CREATE_PROGRAM_FAILED;
+	}
 
-	return m_bInit;
+	return ERRORID_NONE;
 }
 
 
@@ -55,7 +58,7 @@ bool CTechnique::VInit()
 //	Adds specified shader to this technique
 //
 //------------------------------------------------------------------
-bool CTechnique::AddShader(GLenum shaderType, const char* pFileName)
+ErrorId CTechnique::AddShader(GLenum shaderType, const char* pFileName)
 {
 	std::ifstream shaderStream(pFileName, std::ios::in);
 	std::string shaderCode;
@@ -69,14 +72,16 @@ bool CTechnique::AddShader(GLenum shaderType, const char* pFileName)
 		shaderStream.close();
 	}
 	else
-		return false;
+		return ERRORID_SHADER_OPENFILE_FAILED;
 
 	// Create shader object from specified shader type
 	GLuint shaderObj = glCreateShader(shaderType);
+	if (glGetError() == GL_INVALID_ENUM)
+		return ERRORID_SHADER_INVALID_SHADER_TYPE;
 
 	// Is valid?
 	if (shaderObj == 0)
-		return false;
+		return ERRORID_SHADER_CREATE_FAILED;
 
 	m_shaderObjList.push_back(shaderObj);
 
@@ -95,11 +100,11 @@ bool CTechnique::AddShader(GLenum shaderType, const char* pFileName)
 		GLchar infoLog[1024];
 		glGetShaderInfoLog(shaderObj, 1024, NULL, infoLog);
 		OutputDebugStringA(infoLog);
-		return false;
+		return ERRORID_SHADER_COMPILE_FAILED;
 	}
 
 	glAttachShader(m_shaderProg, shaderObj);
-	return true;
+	return ERRORID_NONE;
 }
 
 //------------------------------------------------------------------
@@ -109,7 +114,7 @@ bool CTechnique::AddShader(GLenum shaderType, const char* pFileName)
 //	Finialises shader and links/compiles.
 //
 //------------------------------------------------------------------
-bool CTechnique::Finialise()
+ErrorId CTechnique::Finialise()
 {
 	GLint success = 0;
 	GLchar errorLog[1024] = { 0 };
@@ -121,7 +126,7 @@ bool CTechnique::Finialise()
 	if (success == 0) {
 		glGetProgramInfoLog(m_shaderProg, sizeof(errorLog), NULL, errorLog);
 		OutputDebugString(errorLog);
-		return false;
+		return ERRORID_SHADER_LINK_FAILED;
 	}
 
 	// Validate and check linked shader program
@@ -130,7 +135,7 @@ bool CTechnique::Finialise()
 	if (!success) {
 		glGetProgramInfoLog(m_shaderProg, sizeof(errorLog), NULL, errorLog);
 		OutputDebugString(errorLog);
-		return false;
+		return ERRORID_SHADER_VALIDATE_FAILED;
 	}
 
 	// Remove unrequried loaded shader objects since we have linked shader program.
@@ -138,7 +143,7 @@ bool CTechnique::Finialise()
 		glDeleteShader(*it);
 	
 	m_shaderObjList.clear();
-	return  true;
+	return ERRORID_NONE;
 }
 
 //------------------------------------------------------------------
@@ -171,7 +176,6 @@ bool CTechnique::IsInit() const
 GLint CTechnique::GetUniformLocation(const char* pUniformName)
 {
 	GLuint location = glGetUniformLocation(m_shaderProg, pUniformName);
-
 	return location;
 }
 

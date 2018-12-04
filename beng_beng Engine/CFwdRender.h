@@ -26,7 +26,7 @@ public:
 	CFwdRender();
 	~CFwdRender();
 
-	bool VInit() override;
+	ErrorId VInit() override;
 
 	void SetProjViewMatrix(const glm::mat4& projViewMat);
 	void SetWorldMatrix(const glm::mat4& worldMat);

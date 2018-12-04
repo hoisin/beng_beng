@@ -1,4 +1,4 @@
-///--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
 //
 //	Base shader technique class
 //
@@ -10,6 +10,7 @@
 #include <gl/glew.h>
 #include <gl/wglew.h>
 #include <list>
+#include "Errors.h"
 
 class CTechnique
 {
@@ -17,16 +18,16 @@ public:
 	CTechnique();
 	virtual ~CTechnique();
 
-	virtual bool VInit();
+	virtual ErrorId VInit();
 
 	void Enable();
 
 	bool IsInit() const;
 
 protected:
-	bool AddShader(GLenum shaderType, const char* pShaderText);
+	ErrorId AddShader(GLenum shaderType, const char* pShaderText);
 
-	bool Finialise();
+	ErrorId Finialise();
 
 	GLint GetUniformLocation(const char* pUniformName);
 

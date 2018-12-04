@@ -40,9 +40,9 @@ TEST_F(CMeshUTest, LoadMesh)
 	EXPECT_EQ(true, bTestAppInit) << "testApp failed to initialise!";
 	if (bTestAppInit)
 	{
-		bool bInitOpenGL = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
-		EXPECT_EQ(true, bInitOpenGL) << "Failed to initialise OpenGL";
-		if (bInitOpenGL)
+		ErrorId error = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
+		EXPECT_EQ(ERRORID_NONE, error) << "Failed to initialise OpenGL";
+		if (!IsError(error))
 		{
 			// Test mesh data, doesn't need to be anything
 			MeshData testMeshData(eVertexPNT, 200, 300);
@@ -51,7 +51,8 @@ TEST_F(CMeshUTest, LoadMesh)
 			EXPECT_EQ(false, mesh.IsLoaded()) << "Expected loaded to be false before loading!";
 			EXPECT_EQ(nullptr, mesh.GetMeshData()) << "Expected null ptr for Mesh Data get before loading!";
 
-			EXPECT_EQ(true, mesh.LoadMesh(&testMeshData, testMaterialID)) << "Failed to load mesh data to CMesh";
+			error = mesh.LoadMesh(&testMeshData, testMaterialID);
+			EXPECT_EQ(ERRORID_NONE, error) << "Failed to load mesh data to CMesh";
 			EXPECT_EQ(true, mesh.IsLoaded()) << "Expected loaded to be true after loading!";
 			EXPECT_EQ(testMaterialID, mesh.GetMaterialID()) << "Unexpected materialID";
 			EXPECT_NE(nullptr, mesh.GetMeshData()) << "Expected mesh data to not be null after loading!";
@@ -63,7 +64,8 @@ TEST_F(CMeshUTest, LoadMesh)
 			EXPECT_EQ(nullptr, mesh.GetMeshData()) << "Expected null ptr for mesh data after clean up";
 
 			// Invalid test
-			EXPECT_EQ(false, mesh.LoadMesh(nullptr, testMaterialID)) << "Expected load to fail with null data ptr";
+			error = mesh.LoadMesh(nullptr, testMaterialID);
+			EXPECT_EQ(ERRORID_GFX_MESH_NULL_MESHDATA, error) << "Expected load to fail with null data ptr";
 		}
 	}
 }

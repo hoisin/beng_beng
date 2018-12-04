@@ -29,47 +29,55 @@ CFwdRender::~CFwdRender()
 //	Override parent VInit.
 //
 //------------------------------------------------------------------
-bool CFwdRender::VInit()
+ErrorId CFwdRender::VInit()
 {
 	// Base class should set m_bInit if successful
-	if (!CTechnique::VInit())
-		m_bInit = false;
+	ErrorId error = CTechnique::VInit();
 
-	// If Base init OK
-	if (m_bInit)
+	// Fail if error
+	if (IsError(error))
 	{
-		if (!AddShader(GL_VERTEX_SHADER, m_vertexShaderPath.c_str()))
-			m_bInit = false;
-		
-		// If successful adding vertex shader 
-		if (m_bInit)
-		{
-			if (!AddShader(GL_FRAGMENT_SHADER, m_fragmentShaderPath.c_str()))
-				m_bInit = false;
-
-			// If successful adding fragment shader
-			if (m_bInit)
-			{
-				if (!Finialise())
-					m_bInit = false;
-
-				// If successful linking and finalising shader program
-				if (m_bInit)
-				{
-					m_projViewMatLoc = GetUniformLocation("projViewMatrix");
-					m_worldMatLoc = GetUniformLocation("worldMatrix");
-					m_invWorldMatLoc = GetUniformLocation("invWorldMat");
-					m_diffuseTexSamplerLoc = GetUniformLocation("diffuseTextureSampler");
-
-					// If fail to get uniforms
-					if (m_projViewMatLoc < 0 || m_worldMatLoc < 0 || m_diffuseTexSamplerLoc < 0)
-						m_bInit = false;
-				}
-			}
-		}
+		m_bInit = false;
+		return error;
 	}
 
-	return m_bInit;
+	error = AddShader(GL_VERTEX_SHADER, m_vertexShaderPath.c_str());
+	if (IsError(error))
+	{
+		m_bInit = false;
+		return error;
+	}
+
+	// If successful adding vertex shader 
+	error = AddShader(GL_FRAGMENT_SHADER, m_fragmentShaderPath.c_str());
+	if (IsError(error))
+	{
+		m_bInit = false;
+		return error;
+	}
+
+	// If successful adding fragment shader
+	error = Finialise();
+	if (IsError(error))
+	{
+		m_bInit = false;
+		return error;
+	}
+
+	// If successful linking and finalising shader program
+	m_projViewMatLoc = GetUniformLocation("projViewMatrix");
+	m_worldMatLoc = GetUniformLocation("worldMatrix");
+	m_invWorldMatLoc = GetUniformLocation("invWorldMat");
+	m_diffuseTexSamplerLoc = GetUniformLocation("diffuseTextureSampler");
+
+	// If fail to get uniforms
+	if (m_projViewMatLoc < 0 || m_worldMatLoc < 0 || m_diffuseTexSamplerLoc < 0)
+	{
+		m_bInit = false;
+		return ERRORID_SHADER_UNIFORM_GET_FAILED;
+	}
+
+	return error;
 }
 
 

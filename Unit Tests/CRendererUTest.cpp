@@ -40,9 +40,9 @@ TEST_F(CRendererUTest, BasicTest)
 	if (result)
 	{
 		// Test renderer part of the OpenGL test app due to the need for the callback function
-		result = m_testApp.InitRenderer(m_width, m_height);
-		EXPECT_EQ(true, result) << "Failed to initialise the renderer";
-		if (result)
+		ErrorId error = m_testApp.InitRenderer(m_width, m_height);
+		EXPECT_EQ(ERRORID_NONE, error) << "Failed to initialise the renderer";
+		if (IsNoError(error))
 		{
 			int testWidth = m_testApp.m_renderer.GetScreenWidth();
 			int testHeight = m_testApp.m_renderer.GetScreenHeight();

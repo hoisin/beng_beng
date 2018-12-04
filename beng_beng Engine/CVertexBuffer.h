@@ -12,6 +12,7 @@
 #define __CVERTEXDATA_H__
 
 #include "GfxDefs.h"
+#include "Errors.h"
 
 class CVertexBuffer
 {
@@ -20,7 +21,7 @@ public:
 	CVertexBuffer(const CVertexBuffer& other);
 	~CVertexBuffer();
 
-	bool LoadData(void* pVertData, glm::uint32 vertexCount, EVertexType vertType);
+	ErrorId LoadData(void* pVertData, glm::uint32 vertexCount, EVertexType vertType);
 
 	void UseBuffer();
 

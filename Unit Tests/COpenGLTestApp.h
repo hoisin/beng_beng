@@ -26,9 +26,9 @@ public:
 	void AppRun() override;
 
 	// Test function
-	bool InitOpenGL(int majorVer, int minorVer);
+	ErrorId InitOpenGL(int majorVer, int minorVer);
 
-	bool InitRenderer(int windowWidth, int windowHeight);
+	ErrorId InitRenderer(int windowWidth, int windowHeight);
 
 public:
 	COpenGL m_openGL;

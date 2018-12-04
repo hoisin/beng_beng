@@ -20,30 +20,23 @@
 #include <Windows.h>
 #include <iostream>
 
+#include "Errors.h"
+
 class CVertexBuffer;
 class CIndexBuffer;
 class CShader;
 
-
 class COpenGL
 {
-//public:
-//	enum GBUFFER_TEXTURE_TYPE {
-//		GBUFFER_TEXTURE_TYPE_POSITION,
-//		GBUFFER_TEXTURE_TYPE_DIFFUSE,
-//		GBUFFER_TEXTURE_TYPE_NORMAL,
-//		GBUFFER_TEXTURE_TYPE_TEXCOORD,
-//		GBUFFER_NUM_TEXTURES
-//	};
 
 public:
 	COpenGL();
 	~COpenGL();
 
-	bool InitOpenGL(HINSTANCE hInstance, HWND* hwnd, int majorVer, int minorVer, int winWidth,
+	ErrorId InitOpenGL(HINSTANCE hInstance, HWND* hwnd, int majorVer, int minorVer, int winWidth,
 		int winHeight, WNDPROC funcCallback);
 
-	bool ResizeOpenGLViewportFull();
+	ErrorId ResizeOpenGLViewportFull();
 	void ReleaseOpenGLControl();
 
 	bool IsInitialised();
@@ -73,7 +66,7 @@ public:
 	int GetScreenHeight() const;
 
 private:
-	bool InitGLEW(HINSTANCE hInstance, WNDPROC funcCallback);
+	ErrorId InitGLEW(HINSTANCE hInstance, WNDPROC funcCallback);
 
 	bool RegisterOpenGLClass(HINSTANCE hInstance, WNDPROC funcCallback);
 	void UnregisterOpenGLClass(HINSTANCE hInstance);
@@ -92,9 +85,9 @@ private:
 
 	bool			m_b2D;
 	
-	bool		m_bInit;
-	bool		m_bClassRegistered;
-	bool		m_bGlewInitialised;
+	bool			m_bInit;
+	bool			m_bClassRegistered;
+	bool			m_bGlewInitialised;
 };
 
 

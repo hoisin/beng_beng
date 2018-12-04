@@ -33,10 +33,13 @@ CTextureManager::~CTextureManager(void)
 //	instance
 //
 //------------------------------------------------------------------
-bool CTextureManager::LoadTexture(const std::string& textureID, const std::string& textureFile)
+ErrorId CTextureManager::LoadTexture(const std::string& textureID, const std::string& textureFile)
 {
+	if (textureID == "")
+		return ERRORID_TEXTURE2D_ID_NULL;
+
 	if (ExistingTextureCheck(textureID))
-		return false;
+		return ERRORID_TEXTURE2D_ID_ALREADY_IN_USE;
 
 	unsigned int width = 0, height = 0;
 	unsigned char* pTextureData = 0;
@@ -44,52 +47,51 @@ bool CTextureManager::LoadTexture(const std::string& textureID, const std::strin
 	unsigned int bpp = 0;
 	CTexture2D newTexture(textureID);
 
-	bool bResult = false;
+	ErrorId error = m_pTextureLoader.LoadFile(textureFile, width, height, eTexFormat, bpp, &pTextureData);
 
 	// Try to load texture file into memory
-	if (m_pTextureLoader.LoadFile(textureFile, width, height, eTexFormat, bpp, &pTextureData)) {
+	if (IsNoError(error)) 
+	{
 		// On success, upload loaded texture to OpenGL
 		//
-		// Flag as successful
-		bResult = true;
 		// For now we assume bits per pixel only range from 1 and 3
 		switch (eTexFormat)
 		{
 		case eTextureFormatBMP:
 			if (bpp == 1) {
-				newTexture.LoadTexture(width, height, GL_LUMINANCE, GL_RED, GL_UNSIGNED_BYTE, pTextureData);
+				error = newTexture.LoadTexture(width, height, GL_LUMINANCE, GL_RED, GL_UNSIGNED_BYTE, pTextureData);
 			}
 			else {
-				newTexture.LoadTexture(width, height, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE, pTextureData);
+				error = newTexture.LoadTexture(width, height, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE, pTextureData);
 			}
 			break;
 
 		case eTextureFormatTGA:
 			if (bpp == 1) {
-				newTexture.LoadTexture(width, height, GL_LUMINANCE, GL_RED, GL_UNSIGNED_BYTE, pTextureData);
+				error = newTexture.LoadTexture(width, height, GL_LUMINANCE, GL_RED, GL_UNSIGNED_BYTE, pTextureData);
 			}
 			else {
-				newTexture.LoadTexture(width, height, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE, pTextureData);
+				error = newTexture.LoadTexture(width, height, GL_RGB, GL_BGR, GL_UNSIGNED_BYTE, pTextureData);
 			}
 			break;
 
 		case eTextureFormatPNG:
 			if (bpp == 1) {
-				newTexture.LoadTexture(width, height, GL_LUMINANCE, GL_RED, GL_UNSIGNED_BYTE, pTextureData);
+				error = newTexture.LoadTexture(width, height, GL_LUMINANCE, GL_RED, GL_UNSIGNED_BYTE, pTextureData);
 			}
 			else {
-				newTexture.LoadTexture(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE, pTextureData);
+				error = newTexture.LoadTexture(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE, pTextureData);
 			}
 			break;
 
 		default:
 			// Unsupported texture format
-			bResult = false;
+			error = ERRORID_TEXTURE2D_UNSUPPORTED_FORMAT;
 			break;
 		}
 
 		// Check if supported format
-		if (bResult) {
+		if (IsNoError(error)) {
 			m_textures.push_back(newTexture);
 
 			// Clean up loaded data
@@ -100,7 +102,7 @@ bool CTextureManager::LoadTexture(const std::string& textureID, const std::strin
 		}
 	}
 
-	return bResult;
+	return error;
 }
 
 //------------------------------------------------------------------

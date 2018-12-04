@@ -20,34 +20,30 @@ CModel::~CModel(void)
 //	Model can contain a collection of meshes
 //
 //------------------------------------------------------------------
-bool CModel::AddMesh(MeshData* pData, const std::string& materialID)
+ErrorId CModel::AddMesh(MeshData* pData, const std::string& materialID)
 {
-	bool result = false;
+	if (pData == nullptr)
+		return ERRORID_GFX_MESH_NULL_MESHDATA;
 
-	if (pData != nullptr)
+	// Generate new mesh
+	m_meshes.push_back(CMesh());
+
+	int meshIdx = (int)m_meshes.size() - 1;
+	CMesh* pNewMesh = &m_meshes[meshIdx];
+
+	ErrorId error = pNewMesh->LoadMesh(pData, materialID);
+	// If the mesh load fails, remove the new mesh from vector
+	if (IsError(error))
 	{
-		// Generate new mesh
-		m_meshes.push_back(CMesh());
-
-		int meshIdx = (int)m_meshes.size() - 1;
-		CMesh* pNewMesh = &m_meshes[meshIdx];
-
-		if (pNewMesh != nullptr)
-		{
-			result = pNewMesh->LoadMesh(pData, materialID);
-			// If the mesh load fails, remove the new mesh from vector
-			if (!result)
-			{
-				pNewMesh = nullptr;
-				m_meshes.pop_back();
-			}
-
-			// Update bounding shape
-			m_boundingShape.UpdateBoundary(pData->minVertex, pData->maxVertex);
-		}
+		pNewMesh = nullptr;
+		m_meshes.pop_back();
+		return error;
 	}
 
-	return result;
+	// Update bounding shape
+	m_boundingShape.UpdateBoundary(pData->minVertex, pData->maxVertex);
+
+	return error;
 }
 
 //------------------------------------------------------------------
@@ -64,7 +60,7 @@ CMesh* CModel::GetMesh(GLuint index)
 {
 	CMesh* pMesh = nullptr;
 
-	if(index < m_meshes.size())
+	if (index < m_meshes.size())
 		pMesh = &m_meshes[index];
 
 	return pMesh;

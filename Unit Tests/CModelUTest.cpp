@@ -42,9 +42,9 @@ TEST_F(CModelUTest, AddMesh)
 	EXPECT_EQ(true, result) << "Failed to initialise OpenGL test app";
 	if (result)
 	{
-		result = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
-		EXPECT_EQ(true, result) << "Failed to initialise OpenGL";
-		if (result)
+		ErrorId error = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
+		EXPECT_EQ(ERRORID_NONE, error) << "Failed to initialise OpenGL";
+		if (!IsError(error))
 		{
 			// Test mesh data, doesn't matter what it is
 			MeshData testMeshData_1(eVertexPNT, 200, 300);
@@ -69,15 +69,18 @@ TEST_F(CModelUTest, AddMesh)
 			EXPECT_EQ(nullptr, model.GetMesh(0)) << "Expected null ptr when attempting to get mesh when none in model";
 
 			// Add single mesh
-			EXPECT_EQ(true, model.AddMesh(&testMeshData_1, materialID)) << "Failed to add mesh " + testMeshDataID_1 + " to model";
+			error = model.AddMesh(&testMeshData_1, materialID);
+			EXPECT_EQ(ERRORID_NONE, error) << "Failed to add mesh " + testMeshDataID_1 + " to model";
 
 			EXPECT_EQ(1, model.GetMeshCount()) << "Expected mesh count of one after adding a single mesh data!";
 			// Use mesh data ID to determine what the mesh is
 			EXPECT_EQ(testMeshDataID_1, model.GetMesh(0)->GetMeshData()->m_ID) << "Unexpected mesh";
 
 			// Add two meshes
-			EXPECT_EQ(true, model.AddMesh(&testMeshData_2, materialID)) << "Failed to add mesh " + testMeshDataID_2 + " to model";
-			EXPECT_EQ(true, model.AddMesh(&testMeshData_3, materialID)) << "Failed to add mesh " + testMeshDataID_3 + " to model";
+			error = model.AddMesh(&testMeshData_2, materialID);
+			EXPECT_EQ(ERRORID_NONE, error) << "Failed to add mesh " + testMeshDataID_2 + " to model";
+			error = model.AddMesh(&testMeshData_3, materialID);
+			EXPECT_EQ(ERRORID_NONE, error) << "Failed to add mesh " + testMeshDataID_3 + " to model";
 
 			// Test Retrieval of last added mesh
 			EXPECT_EQ(3, model.GetMeshCount()) << "Expected to have 3 meshes in model";
@@ -88,6 +91,10 @@ TEST_F(CModelUTest, AddMesh)
 
 			// Test retrieval of invalid mesh
 			EXPECT_EQ(nullptr, model.GetMesh(100)) << "Expected null ptr when attempting to retrieve invalid mesh";
+
+			// Try adding null data
+			error = model.AddMesh(nullptr, materialID);
+			EXPECT_EQ(ERRORID_GFX_MESH_NULL_MESHDATA, error) << "Expected null meshdata error";
 
 			// Shut down
 			model.CleanUp();

@@ -6,19 +6,28 @@
 #include "CIndexBuffer.h"
 #include "COpenGL.h"
 
-
-COpenGL::COpenGL() : m_hInstance(nullptr), m_pHwnd(nullptr), m_iMajorVer(3), m_iMinorVer(3), m_winWidth(0),
-	m_winHeight(0), m_b2D(false), m_bInit(false), m_bClassRegistered(false), m_bGlewInitialised(false),
-	m_currentTexture(0), m_hRC(nullptr), m_pRefCurrentShader(nullptr), m_hDC(nullptr)
+COpenGL::COpenGL() : 
+	m_hInstance(nullptr),
+	m_pHwnd(nullptr), 
+	m_iMajorVer(3), 
+	m_iMinorVer(3), 
+	m_winWidth(0),
+	m_winHeight(0),
+	m_b2D(false), 
+	m_bInit(false), 
+	m_bClassRegistered(false), 
+	m_bGlewInitialised(false),
+	m_currentTexture(0), 
+	m_hRC(nullptr), 
+	m_pRefCurrentShader(nullptr), 
+	m_hDC(nullptr)
 {
 }
-
 
 COpenGL::~COpenGL()
 {
 	ReleaseOpenGLControl();
 }
-
 
 //------------------------------------------------------------------
 //
@@ -36,57 +45,63 @@ COpenGL::~COpenGL()
 //	Initialises OpenGL
 //
 //------------------------------------------------------------------
-bool COpenGL::InitOpenGL(HINSTANCE hInstance, HWND* pHwnd, int majorVer, int minorVer, int winWidth,
+ErrorId COpenGL::InitOpenGL(HINSTANCE hInstance, HWND* pHwnd, int majorVer, int minorVer, int winWidth,
 	int winHeight, WNDPROC funcCallback)
 {
-	if(!InitGLEW(hInstance, funcCallback))
-		return false;
+	// hwnd can't be null
+	if (pHwnd == nullptr)
+		return ERRORID_GFX_INIT_INVALID_NULL_HWND;
+
+	// Invalid window width/height
+	if (winWidth <= 0 || winHeight <= 0)
+		return ERRORID_GFX_INIT_INVALID_WINDOW_WIDTH_HEIGHT;
+	
+	// If GLEW failure
+	if (InitGLEW(hInstance, funcCallback) != ERRORID_NONE)
+		return ERRORID_GFX_INIT_GLEW_FAILED;
 
 	m_pHwnd = pHwnd;
 	m_hInstance = hInstance;
 	m_hDC = GetDC(*m_pHwnd);
-
 	m_winWidth = winWidth;
 	m_winHeight = winHeight;
 
-	bool bError = false;
+	ErrorId error = ERRORID_NONE;
 	PIXELFORMATDESCRIPTOR pfd;
 
-	if(majorVer <= 2)
+	// If your GFX card is ancient
+	if (majorVer <= 2)
 	{
 		memset(&pfd, 0, sizeof(PIXELFORMATDESCRIPTOR));
-		pfd.nSize		= sizeof(PIXELFORMATDESCRIPTOR);
-		pfd.nVersion   = 1;
-		pfd.dwFlags    = PFD_DOUBLEBUFFER | PFD_SUPPORT_OPENGL | PFD_DRAW_TO_WINDOW;
+		pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
+		pfd.nVersion = 1;
+		pfd.dwFlags = PFD_DOUBLEBUFFER | PFD_SUPPORT_OPENGL | PFD_DRAW_TO_WINDOW;
 		pfd.iPixelType = PFD_TYPE_RGBA;
 		pfd.cColorBits = 32;
 		pfd.cDepthBits = 32;
 		pfd.iLayerType = PFD_MAIN_PLANE;
- 
+
 		int iPixelFormat = ChoosePixelFormat(m_hDC, &pfd);
-		if (iPixelFormat == 0) {
-			//CDEBUGLOG->WriteError(logErrors::ERROR_TYPE_GRAPHICS,
-			//	logErrors::GFX_ERROR_INVALID_PIXEL_FORMAT);
-			return false;
-		}
+		if (iPixelFormat == 0)
+			error = ERRORID_GFX_INVALID_PIXEL_FORMAT;
 
-		if (!SetPixelFormat(m_hDC, iPixelFormat, &pfd)) {
-			//CDEBUGLOG->WriteError(logErrors::ERROR_TYPE_GRAPHICS,
-			//	logErrors::GFX_ERROR_SET_PIXEL_FORMAT);
-			return false;
-		}
+		if (!IsError(error))
+		{
+			if (!SetPixelFormat(m_hDC, iPixelFormat, &pfd))
+				error = ERRORID_GFX_SET_PIXEL_FORMAT_FAILED;
 
-		// Create the old style context (OpenGL 2.1 and before)
-		m_hRC = wglCreateContext(m_hDC);
-		if(m_hRC)
-			wglMakeCurrent(m_hDC, m_hRC);
-		else {
-			//CDEBUGLOG->WriteError(logErrors::ERROR_TYPE_GRAPHICS,
-			//	logErrors::GFX_ERROR_CREATE_CONTEXT);
-			bError = true;
+			if (!IsError(error))
+			{
+				// Create the old style context (OpenGL 2.1 and before)
+				m_hRC = wglCreateContext(m_hDC);
+				if (m_hRC)
+					wglMakeCurrent(m_hDC, m_hRC);
+				else
+					error = ERRORID_GFX_MAKECURRENT_HDC_FAILED;
+			}
 		}
 	}
-	else if(WGLEW_ARB_create_context && WGLEW_ARB_pixel_format)
+	else if (WGLEW_ARB_create_context && WGLEW_ARB_pixel_format)
 	{
 		const int iPixelFormatAttribList[] =
 		{
@@ -99,6 +114,7 @@ bool COpenGL::InitOpenGL(HINSTANCE hInstance, HWND* pHwnd, int majorVer, int min
 			WGL_STENCIL_BITS_ARB, 8,
 			0 // End of attributes list
 		};
+
 		int iContextAttribs[] =
 		{
 			WGL_CONTEXT_MAJOR_VERSION_ARB, majorVer,
@@ -111,34 +127,31 @@ bool COpenGL::InitOpenGL(HINSTANCE hInstance, HWND* pHwnd, int majorVer, int min
 		wglChoosePixelFormatARB(m_hDC, iPixelFormatAttribList, NULL, 1, &iPixelFormat, (UINT*)&iNumFormats);
 
 		// PFD seems to be only redundant parameter now
-		if (!SetPixelFormat(m_hDC, iPixelFormat, &pfd)) {
-			//CDEBUGLOG->WriteError(logErrors::ERROR_TYPE_GRAPHICS,
-			//	logErrors::GFX_ERROR_SET_PIXEL_FORMAT);
-			return false;
+		if (!SetPixelFormat(m_hDC, iPixelFormat, &pfd))
+			error = ERRORID_GFX_SET_PIXEL_FORMAT_FAILED;
+
+		if (!IsError(error))
+		{
+			m_hRC = wglCreateContextAttribsARB(m_hDC, 0, iContextAttribs);
+
+			// If everything went OK
+			if (m_hRC)
+				wglMakeCurrent(m_hDC, m_hRC);
+			else
+				error = ERRORID_GFX_MAKECURRENT_HDC_FAILED;
 		}
-
-		m_hRC = wglCreateContextAttribsARB(m_hDC, 0, iContextAttribs);
-
-		// If everything went OK
-		if(m_hRC) 
-			wglMakeCurrent(m_hDC, m_hRC);
-		else {
-			//CDEBUGLOG->WriteError(logErrors::ERROR_TYPE_GRAPHICS,
-			//	logErrors::GFX_ERROR_CREATE_CONTEXT);
-			bError = true;
-		}
-
 	}
-	else bError = true;
+	else
+		error = ERRORID_GFX_GLEW_CREATECONTEXT_PIXELFORMAT_ERROR;
 	
-	if(bError)
+	if(IsError(error))
 	{
 		// Generate error messages
 		char sErrorMessage[255], sErrorTitle[255];
 		sprintf_s(sErrorMessage, "OpenGL %d.%d is not supported! Please download latest GPU drivers!", majorVer, minorVer);
 		sprintf_s(sErrorTitle, "OpenGL %d.%d Not Supported", majorVer, minorVer);
 		MessageBox(*m_pHwnd, sErrorMessage, sErrorTitle, MB_ICONINFORMATION);
-		return false;
+		return error;
 	}
 
 	// Set the clear colour
@@ -148,9 +161,8 @@ bool COpenGL::InitOpenGL(HINSTANCE hInstance, HWND* pHwnd, int majorVer, int min
 
 	m_bInit = true;
 
-	return true;
+	return error;
 }
-
 
 //------------------------------------------------------------------
 //
@@ -159,17 +171,16 @@ bool COpenGL::InitOpenGL(HINSTANCE hInstance, HWND* pHwnd, int majorVer, int min
 //	Resizes viewport to full window with perspective projection
 //
 //------------------------------------------------------------------
-bool COpenGL::ResizeOpenGLViewportFull()
+ErrorId COpenGL::ResizeOpenGLViewportFull()
 {
 	if(m_pHwnd == NULL)
-		return false;
+		return ERRORID_GFX_NULL_HWND;
 
 	RECT rRect; GetClientRect(*m_pHwnd, &rRect);
 	glViewport(0, 0, rRect.right, rRect.bottom);
 
-	return true;
+	return ERRORID_NONE;
 }
-
 
 //------------------------------------------------------------------
 //
@@ -226,11 +237,17 @@ void COpenGL::SetCurrentTexture(GLuint texture)
 	}
 }
 
+//------------------------------------------------------------------
+//
+//	GetCurrentTexture(..)
+//
+//	Returns handle to current set texture
+//
+//------------------------------------------------------------------
 GLuint COpenGL::GetCurrentTexture() const
 {
 	return m_currentTexture;
 }
-
 
 //------------------------------------------------------------------
 //
@@ -247,6 +264,13 @@ void COpenGL::SetCurrentShader(CShader* pNewShader)
 	m_pRefCurrentShader = pNewShader;
 }
 
+//------------------------------------------------------------------
+//
+//	GetCurrentShader(..)
+//
+//	Returns handle to current set shader
+//
+//------------------------------------------------------------------
 CShader* COpenGL::GetCurrentShader() const
 {
 	return m_pRefCurrentShader;
@@ -257,12 +281,10 @@ void COpenGL::BeginDraw()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-
 void COpenGL::EndDraw()
 {
 	FlipBuffers();
 }
-
 
 //------------------------------------------------------------------
 //
@@ -285,7 +307,6 @@ void COpenGL::RenderBuffer(CVertexBuffer* pVertBuffer, CIndexBuffer* pIndexBuffe
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-
 //------------------------------------------------------------------
 //
 //	MakeCurrent(..)
@@ -299,8 +320,6 @@ void COpenGL::MakeCurrent()
 	wglMakeCurrent(m_hDC, m_hRC);
 }
 
-
-
 //------------------------------------------------------------------
 //
 //	ClearScreen(..)
@@ -313,7 +332,6 @@ void COpenGL::ClearScreen()
 	// Clear screen before drawing
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
-
 
 //------------------------------------------------------------------
 //
@@ -341,7 +359,6 @@ void COpenGL::Set2D(bool bFlag)
 	}
 }
 
-
 //------------------------------------------------------------------
 //
 //	SetWireFrame(..)
@@ -359,7 +376,6 @@ void COpenGL::SetWireFrame(bool bFlag)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 }
-
 
 //------------------------------------------------------------------
 //
@@ -383,7 +399,6 @@ int COpenGL::GetScreenHeight() const
 	return m_winHeight;
 }
 
-
 //------------------------------------------------------------------
 //
 //	InitGLEW(..)
@@ -391,27 +406,22 @@ int COpenGL::GetScreenHeight() const
 //	Initialises the GLEW library
 //
 //------------------------------------------------------------------
-bool COpenGL::InitGLEW(HINSTANCE hInstance, WNDPROC funcCallback)
+ErrorId COpenGL::InitGLEW(HINSTANCE hInstance, WNDPROC funcCallback)
 {
+	// No error if already initialised
 	if(m_bGlewInitialised)
-		return true;
+		return ERRORID_NONE;
 
 	// In order for GLEW to be initialised, we need a window.
 	// We create a fake window to initialise GLEW with then destroy the window.
-	RegisterOpenGLClass(hInstance, funcCallback);
-
-	if (!m_bClassRegistered) {
-		//CDEBUGLOG->WriteError(logErrors::ERROR_TYPE_GRAPHICS, logErrors::GFX_ERROR_GLEW_OPENGL_REGISTER);
-		return false;
-	}
+	if (!RegisterOpenGLClass(hInstance, funcCallback))
+		return ERRORID_GFX_REGISTEROPENGLCLASS_FAILED;
 
 	HWND hWndTemp = CreateWindow(OPENGL_CLASS_NAME, "FAKE", WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN, 0, 0,
 		CW_USEDEFAULT, CW_USEDEFAULT, NULL, NULL, hInstance, NULL);
 
-	if (hWndTemp == NULL) {
-		//CDEBUGLOG->WriteError(logErrors::ERROR_TYPE_GRAPHICS, logErrors::GFX_ERROR_GLEW_OPENGL_WINDOW);
-		return false;
-	}
+	if (hWndTemp == NULL)
+		return ERRORID_GFX_CREATE_WINDOW_FAILED;
 
 	m_hDC = GetDC(hWndTemp);
 
@@ -427,43 +437,30 @@ bool COpenGL::InitGLEW(HINSTANCE hInstance, WNDPROC funcCallback)
 	pfd.iLayerType = PFD_MAIN_PLANE;
  
 	int iPixelFormat = ChoosePixelFormat(m_hDC, &pfd);
-	if (iPixelFormat == 0) {
-		//CDEBUGLOG->WriteError(logErrors::ERROR_TYPE_GRAPHICS,
-		//	logErrors::GFX_ERROR_INVALID_PIXEL_FORMAT);
-		return false;
-	}
+	if (iPixelFormat == 0)
+		return ERRORID_GFX_INVALID_PIXEL_FORMAT;
 
+	if (!SetPixelFormat(m_hDC, iPixelFormat, &pfd))
+		return ERRORID_GFX_SET_PIXEL_FORMAT_FAILED;
 
-	if (!SetPixelFormat(m_hDC, iPixelFormat, &pfd)) {
-		//CDEBUGLOG->WriteError(logErrors::ERROR_TYPE_GRAPHICS,
-		//	logErrors::GFX_ERROR_SET_PIXEL_FORMAT);
-		return false;
-	}
-
-	// Create the false, old style context (OpenGL 2.1 and before)
+	// Create the fake, old style context (OpenGL 2.1 and before)
 	HGLRC hRCFake = wglCreateContext(m_hDC);
 	wglMakeCurrent(m_hDC, hRCFake);
 
-	bool bResult = true;
-
-	if(!m_bGlewInitialised)
+	if (glewInit() != GLEW_OK)
 	{
-		if(glewInit() != GLEW_OK)
-		{
-			//CDEBUGLOG->WriteError(logErrors::ERROR_TYPE_GRAPHICS,
-			//	logErrors::GFX_ERROR_GLEW_INIT);
-			MessageBox(*m_pHwnd, "Couldn't initialize GLEW!", "Fatal Error", MB_ICONERROR);
-			bResult = false;
-		}
-
-		m_bGlewInitialised = true;
+		MessageBox(*m_pHwnd, "Couldn't initialize GLEW!", "Fatal Error", MB_ICONERROR);
+		return ERRORID_GFX_INIT_GLEW_FAILED;
 	}
 
+	m_bGlewInitialised = true;
+
+	// Clean up fake window
 	wglMakeCurrent(NULL, NULL);
 	wglDeleteContext(hRCFake);
 	DestroyWindow(hWndTemp);
 
-	return bResult;
+	return ERRORID_NONE;
 }
 
 //------------------------------------------------------------------
@@ -505,7 +502,6 @@ bool COpenGL::RegisterOpenGLClass(HINSTANCE hInstance, WNDPROC funcCallback)
 	m_bClassRegistered = true;
 	return result;
 }
-
 
 //------------------------------------------------------------------
 //

@@ -9,6 +9,7 @@
 #include <map>
 #include <vector>
 #include "CMaterial.h"
+#include "Errors.h"
 
 class CMaterialManager
 {
@@ -16,7 +17,7 @@ public:
 	CMaterialManager(void);
 	~CMaterialManager(void);
 
-	bool AddMaterial(const std::string& materialID, const CMaterial& material);
+	ErrorId AddMaterial(const std::string& materialID, const CMaterial& material);
 
 	CMaterial* GetMaterial(const std::string& materialID);
 

@@ -40,9 +40,9 @@ TEST_F(CTextureLoaderUTest, LoadTexture)
 	EXPECT_EQ(true, result) << "Failed to initialise test window";
 	if (result)
 	{
-		result = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
-		EXPECT_EQ(true, result) << "Failed to initialise OpenGL";
-		if (result)
+		ErrorId error = m_testApp.InitOpenGL(m_majorVer, m_minorVer);
+		EXPECT_EQ(ERRORID_NONE, error) << "Failed to initialise OpenGL";
+		if (!IsError(error))
 		{
 			CTextureLoader textureLoader;
 			std::string testFileBMP = "..\\UTest Data\\Textures\\test.bmp";
@@ -60,11 +60,11 @@ TEST_F(CTextureLoaderUTest, LoadTexture)
 			unsigned int bytesPerPixel = 0;
 
 			// Test load BMP
-			result = textureLoader.LoadFile(testFileBMP, textureWidth, textureHeight, textureFormat,
+			error = textureLoader.LoadFile(testFileBMP, textureWidth, textureHeight, textureFormat,
 				bytesPerPixel, &pTextureBMP);
 
-			EXPECT_EQ(true, result) << "Failed to load BMP texture";
-			if (result) 
+			EXPECT_EQ(ERRORID_NONE, error) << "Failed to load BMP texture";
+			if (!IsError(error)) 
 			{
 				EXPECT_EQ(expectWidth, textureWidth) << "Unexpected BMP texture width of " + std::to_string(textureWidth) + " instead of " + std::to_string(expectWidth);
 				EXPECT_EQ(expectHeight, textureHeight) << "Unexpected BMP texture height of " + std::to_string(textureHeight) + " instead of " + std::to_string(expectHeight);
@@ -79,11 +79,10 @@ TEST_F(CTextureLoaderUTest, LoadTexture)
 			bytesPerPixel = 0;
 
 			// Test load PNG
-			result = textureLoader.LoadFile(testFilePNG, textureWidth, textureHeight, textureFormat,
+			error = textureLoader.LoadFile(testFilePNG, textureWidth, textureHeight, textureFormat,
 				bytesPerPixel, &pTexturePNG);
-
-			EXPECT_EQ(true, result) << "Failed to load PNG texture";
-			if (result)
+			EXPECT_EQ(ERRORID_NONE, error) << "Failed to load PNG texture";
+			if (!IsError(error))
 			{
 				EXPECT_EQ(expectWidth, textureWidth) << "Unexpected PNG texture width of " + std::to_string(textureWidth) + " instead of " + std::to_string(expectWidth);
 				EXPECT_EQ(expectHeight, textureHeight) << "Unexpected PNG texture height of " + std::to_string(textureHeight) + " instead of " + std::to_string(expectHeight);
@@ -98,11 +97,10 @@ TEST_F(CTextureLoaderUTest, LoadTexture)
 			bytesPerPixel = 0;
 
 			// Test load TGA
-			result = textureLoader.LoadFile(testFileTARGA, textureWidth, textureHeight, textureFormat,
+			error = textureLoader.LoadFile(testFileTARGA, textureWidth, textureHeight, textureFormat,
 				bytesPerPixel, &pTextureTGA);
-
-			EXPECT_EQ(true, result) << "Failed to load TGA texture";
-			if (result)
+			EXPECT_EQ(ERRORID_NONE, error) << "Failed to load TGA texture";
+			if (!IsError(error))
 			{
 				EXPECT_EQ(expectWidth, textureWidth) << "Unexpected TGA texture width of " + std::to_string(textureWidth) + " instead of " + std::to_string(expectWidth);
 				EXPECT_EQ(expectHeight, textureHeight) << "Unexpected TGA texture height of " + std::to_string(textureHeight) + " instead of " + std::to_string(expectHeight);
@@ -127,6 +125,15 @@ TEST_F(CTextureLoaderUTest, LoadTexture)
 				delete[] pTextureTGA;
 				pTextureTGA = nullptr;
 			}
+
+			// Test load invalid (null string)
+			error = textureLoader.LoadFile("", textureWidth, textureHeight, textureFormat,
+				bytesPerPixel, &pTextureTGA);
+			EXPECT_EQ(ERRORID_GFX_TEXTURE_LOAD_UNKNOWN_FORMAT, error) << "Expected unknown format error on loading null string";
+
+			error = textureLoader.LoadFile("NoFile.bmp", textureWidth, textureHeight, textureFormat,
+				bytesPerPixel, &pTextureBMP);
+			EXPECT_EQ(ERRORID_GFX_TEXTURE_LOAD_FAILED, error) << "Expected load texture failure error";
 		}
 	}
 }

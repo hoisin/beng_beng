@@ -211,7 +211,7 @@ protected:
 };
 
 
-
+ 
 class CLightManager
 {
 public:
@@ -225,6 +225,41 @@ public:
 protected:
 	
 };
+
+
+26/11/2018
+---------------------
+Refactor/revise work:
+
+Done stuff:
+- COpenGL & Tests
+- CVertexBuffer & Tests
+- CIndexBuffer & Tests
+- CTechnique & Tests
+- CFwdRender & Tests
+- TextureLoadeder & Tests
+- Texture2D & Tests
+- TextureManager & tests
+- MaterialMgr & tests
+- Material (No change required)
+- CMesh (No change)
+- CModel (No change)
+- CModelManager (No change).
+- CRenderer & tests
+
+- Graphics Done
+
+- CBaseApp (No change)
+- CDerviedClass (No change).
+
+- MeshDataManager & tests
+
+
+
+
+
+- Review camera code ************
+
 
 
 

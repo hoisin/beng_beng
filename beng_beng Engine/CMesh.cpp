@@ -29,36 +29,28 @@ CMesh::~CMesh()
 //  Loads mesh data to vertex and index buffers
 //
 //------------------------------------------------------------------
-bool CMesh::LoadMesh(MeshData* pData, const std::string& materialID)
+ErrorId CMesh::LoadMesh(MeshData* pData, const std::string& materialID)
 {
-	bool result = false;
+	if (pData == nullptr)
+		return ERRORID_GFX_MESH_NULL_MESHDATA;
 
-	if (pData != nullptr)
+	// Reference mesh data pointer
+	m_meshData = pData;
+	m_materialID = materialID;
+
+	// Load vertex data to buffer
+	ErrorId error = m_vertexBuffer.LoadData(m_meshData->pVertices, m_meshData->vertexCount, m_meshData->vertexType);
+	if (IsNoError(error))
 	{
-		// Reference mesh data pointer
-		m_meshData = pData;
-		m_materialID = materialID;
-
-		// Load vertex data to buffer
-		result = m_vertexBuffer.LoadData(m_meshData->pVertices, m_meshData->vertexCount, m_meshData->vertexType);
-		if (result)
-		{
-			result = m_indexBuffer.LoadData(m_meshData->pIndices, m_meshData->indexCount);
-			// If failed to load data to index buffer, unload the vertex buffer
-			if (!result)
-			{
-				m_vertexBuffer.ShutDown();
-				result = false;
-			}
-			else   // No errors, vertex and index buffer loads successful
-			{
-				result = true;
-				m_bLoaded = true;
-			}	
-		}
+		error = m_indexBuffer.LoadData(m_meshData->pIndices, m_meshData->indexCount);
+		// If failed to load data to index buffer, unload the vertex buffer
+		if (IsError(error))
+			m_vertexBuffer.ShutDown();
+		else   // No errors, vertex and index buffer loads successful
+			m_bLoaded = true;
 	}
 
-	return result;
+	return error;
 }
 
 bool CMesh::IsLoaded() const

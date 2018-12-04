@@ -32,32 +32,32 @@ public:
 
 	// Load shader
 	// Only one at the moment. Potentially another if deferred
-	bool LoadTechnique(const std::string& vertexShaderFile,
+	ErrorId LoadTechnique(const std::string& vertexShaderFile,
 		const std::string& fragmentShaderFile);
 
 	// Material loading
 	// - Involves loading texture
 	// - Load/creating shader params + linking texture
-	bool LoadTexture(const std::string& fileName, const std::string& textureID);
+	ErrorId LoadTexture(const std::string& fileName, const std::string& textureID);
 	CTexture2D* GetTexture(const std::string& textureID);
 
-	bool AddMaterial(const CMaterial& material, const std::string& materialID);
+	ErrorId AddMaterial(const CMaterial& material, const std::string& materialID);
 	CMaterial* GetMaterial(const std::string& materialID);
 
 	// Create models
 	bool LoadModel(const std::string& fileDir, const std::string& fileName, const std::string& modelID);
-	bool CreateModelCube(int size, int subDiv, EVertexType vertType, const std::string& modelID, const std::string& materialID);
-	bool CreateModeSphere(int size, int subDiv, EVertexType vertType, const std::string& modelID, const std::string& materialID);
-	bool CreateModelPlane(int size, int subDiv, EVertexType vertType, const std::string& modelID, const std::string& materialID);
+	ErrorId CreateModelCube(int size, int subDiv, EVertexType vertType, const std::string& modelID, const std::string& materialID);
+	ErrorId CreateModelSphere(int size, int subDiv, EVertexType vertType, const std::string& modelID, const std::string& materialID);
+	ErrorId CreateModelPlane(int size, int subDiv, EVertexType vertType, const std::string& modelID, const std::string& materialID);
 
 	// Generating/loading mesh data
 	//	- Load/Generating mesh data CPU side
 	//
 	// These are to be replaced by model creation functions.
 	// But keeping them here for now. Avoid using them directly
-	bool CreateCubeMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID);
-	bool CreateSphereMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID);
-	bool CreatePlaneMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID);
+	ErrorId CreateCubeMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID);
+	ErrorId CreateSphereMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID);
+	ErrorId CreatePlaneMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID);
 
 	MeshData* GetMeshData(const std::string& meshDataID);
 
@@ -67,7 +67,7 @@ public:
 	bool CreateModel(const std::string& modelID);
 	CModel* GetModel(const std::string& modelID);
 
-	bool AddMeshToModel(const std::string& modelID, const std::string& meshDataID,
+	ErrorId AddMeshToModel(const std::string& modelID, const std::string& meshDataID,
 		const std::string& meshMaterialID);
 
 protected:

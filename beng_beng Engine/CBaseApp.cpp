@@ -29,13 +29,17 @@ CBaseApp::~CBaseApp()
 //	Prevents running of multiple instances
 //
 //------------------------------------------------------------------
-bool CBaseApp::Initialise(const std::string& windowTitle, UINT windowWidth,
+ErrorId CBaseApp::Initialise(const std::string& windowTitle, UINT windowWidth,
 	UINT windowHeight, HINSTANCE hInstance)
 {
-	if (windowTitle == "")
-		return false;
+	if (windowWidth == 0 || windowHeight == 0)
+		return ERRORID_APP_INIT_INVALID_WINDOW_WIDTH_HEIGHT;
 
+	// Assign default window title if param is empty
 	m_windowName = windowTitle;
+	if (m_windowName == "")
+		m_windowName = DEFAULT_WINDOW_TITLE;
+	
 	m_appName = m_windowName + "App";
 
 	// Don't allow running of multiple instances
@@ -44,25 +48,26 @@ bool CBaseApp::Initialise(const std::string& windowTitle, UINT windowWidth,
 	{
 		MessageBox(NULL, "Application already running!", "Multiple instances found",
 			MB_ICONINFORMATION | MB_OK);
-		return false;
+		return ERRORID_APP_INIT_MULTIPLE_INSTANCES_DETECTED;
 	}
 
 	// Attempt to register window class
 	if (!RegisterAppClass(hInstance))
-		return false;
+		return ERRORID_APP_INIT_REGISTER_APP_FAILED;
 
 	// Attempt to create the window
-	if (!CreateAppWindow(hInstance, windowTitle, windowWidth, windowHeight))
-		return false;
+	if (!CreateAppWindow(hInstance, m_windowName, windowWidth, windowHeight))
+		return ERRORID_APP_INIT_CREATE_WINDOW_FAILED;
 
 	// Derived initalise implementation
-	if (OnInitialise())
+	ErrorId error = OnInitialise();
+	if (error == ERRORID_NONE)
+	{
 		m_bRun = true;
-	else
-		return false;
+		m_bInitialised = true;
+	}
 			
-	m_bInitialised = true;
-	return true;
+	return error;
 }
 
 void CBaseApp::CloseRun()
@@ -78,7 +83,7 @@ void CBaseApp::ShutDown()
 		m_hWnd = nullptr;
 	}
 	
-	// Release and CloseHandle to fully close the mutex (for unit tests)
+	// Release and CloseHandle() to fully close the mutex (for unit tests)
 	if (m_hMutex)
 	{
 		ReleaseMutex(m_hMutex);
@@ -88,6 +93,9 @@ void CBaseApp::ShutDown()
 
 	UnregisterClass(m_appName.c_str(), m_hInstance);
 
+	m_hInstance = nullptr;
+	m_windowName = "";
+	m_appName = "";
 	m_bInitialised = false;
 	m_bAppActive = false;
 	m_width = 0;
@@ -151,7 +159,7 @@ LRESULT CALLBACK CBaseApp::MsgHandlerMain(HWND hWnd, UINT uiMsg, WPARAM wParam, 
 	// Retrieve a pointer to the Application object
 	CBaseApp* app = (CBaseApp*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
 
-	if (app == NULL) 
+	if (app == nullptr) 
 		return DefWindowProc(hWnd, uiMsg, wParam, lParam);
 	
 	// Handle required messages
@@ -165,7 +173,7 @@ LRESULT CALLBACK CBaseApp::MsgHandlerMain(HWND hWnd, UINT uiMsg, WPARAM wParam, 
 	}
 
 	// Run the OnEvent() function to handle our events
-	if (app->OnEvent(hWnd, uiMsg, wParam, lParam) == FALSE) 
+	if (app->OnEvent(hWnd, uiMsg, wParam, lParam) == false) 
 		return DefWindowProc(hWnd, uiMsg, wParam, lParam);
 	
 	return 0;
@@ -187,7 +195,6 @@ bool CBaseApp::RegisterAppClass(HINSTANCE hAppInstance)
 	memset(&wcex, 0, sizeof(WNDCLASSEX));
 	wcex.cbSize = sizeof(WNDCLASSEX);
 	wcex.style = CS_OWNDC | CS_HREDRAW | CS_VREDRAW;
-
 	wcex.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
 
 	// Memory Access Violation error
@@ -196,10 +203,8 @@ bool CBaseApp::RegisterAppClass(HINSTANCE hAppInstance)
 	wcex.hCursor = LoadCursor(m_hInstance, IDC_ARROW);*/
 
 	wcex.hInstance = hAppInstance;
-
 	wcex.lpfnWndProc = MsgHandlerMain;
 	wcex.lpszClassName = m_appName.c_str();
-
 	wcex.lpszMenuName = NULL;
 
 	// Register Class
@@ -221,9 +226,9 @@ bool CBaseApp::RegisterAppClass(HINSTANCE hAppInstance)
 //	Creates the window with the specified string as title
 //
 //------------------------------------------------------------------
-bool CBaseApp::CreateAppWindow(HINSTANCE hAppInstance, const std::string & windowTitle, UINT windowWidth, UINT windowHeight)
+bool CBaseApp::CreateAppWindow(HINSTANCE hAppInstance, const std::string & windowTitle, 
+	UINT windowWidth, UINT windowHeight)
 {
-	m_windowName = windowTitle;
 	m_width = windowWidth;
 	m_height = windowHeight;
 
@@ -261,8 +266,22 @@ bool CBaseApp::CreateAppWindow(HINSTANCE hAppInstance, const std::string & windo
 	UpdateWindow(m_hWnd);
 
 	m_hInstance = hAppInstance;
-
 	return true;
+}
+
+//------------------------------------------------------------------
+//
+//	UpdateWindowName(..)
+//
+//	Params:
+//	name = window name to update
+//
+//	Updates the window name data member
+//
+//------------------------------------------------------------------
+void CBaseApp::UpdateWindowName(const std::string & name)
+{
+	m_windowName = name;
 }
 
 //------------------------------------------------------------------
@@ -272,10 +291,10 @@ bool CBaseApp::CreateAppWindow(HINSTANCE hAppInstance, const std::string & windo
 //	Do App initialisation here
 //
 //------------------------------------------------------------------
-bool CBaseApp::OnInitialise()
+ErrorId CBaseApp::OnInitialise()
 {
 	// Implement on derived
-	return true;
+	return ERRORID_NONE;
 }
 
 //------------------------------------------------------------------
@@ -327,11 +346,7 @@ bool CBaseApp::OnEvent(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 	
 	// Implement and call in derived
-
 	return result;
 }
 
-void CBaseApp::UpdateWindowName(const std::string & name)
-{
-	m_windowName = name;
-}
+

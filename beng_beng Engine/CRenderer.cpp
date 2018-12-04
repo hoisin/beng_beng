@@ -36,17 +36,18 @@ CRenderer::~CRenderer()
 //	Initialises the renderer
 //
 //------------------------------------------------------------------
-bool CRenderer::Initialise(HINSTANCE hInstance, HWND* hwnd, UINT windowWidth,
+ErrorId CRenderer::Initialise(HINSTANCE hInstance, HWND* hwnd, UINT windowWidth,
 	UINT windowHeight, WNDPROC funcCallBack)
 {
 	// Init the OpenGL
 	int majorVer = 3;
 	int minorVer = 1;
-	if (!m_openGL.InitOpenGL(hInstance, hwnd, majorVer, minorVer, windowWidth, windowHeight, funcCallBack)) {
+	ErrorId error = m_openGL.InitOpenGL(hInstance, hwnd, majorVer, minorVer, windowWidth, windowHeight, funcCallBack);
+	if (error != ERRORID_NONE) {
 		// Failed to initialise OpenGL
 		// Return some debug error
 		std::cerr << "Failed to initialise OpenGL" << std::endl;
-		return false;
+		return error;
 	}
 
 	// Update the view port
@@ -57,7 +58,7 @@ bool CRenderer::Initialise(HINSTANCE hInstance, HWND* hwnd, UINT windowWidth,
 
 	// Init rest of stuff...
 
-	return true;
+	return error;
 }
 
 //------------------------------------------------------------------
