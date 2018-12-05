@@ -87,6 +87,9 @@ void CSceneManager::RenderScene(int cameraNo, float tickInterpValue)
 {
 	ClearDrawList();
 
+	if (tickInterpValue > 1.0)
+		tickInterpValue = 1.0;
+
 	auto drawObjIT = m_objDrawList.begin();
 	while (drawObjIT != m_objDrawList.end()) {
 		SDrawMesh* newDrawMesh = new SDrawMesh;
@@ -111,7 +114,7 @@ void CSceneManager::RenderScene(int cameraNo, float tickInterpValue)
 
 	int cam = cameraNo - 1;
 	m_pRenderer->UpdateProjMatrix(m_cameraArray[cam]->GetProjectionMatrix());
-	m_pRenderer->UpdateViewMatrix(m_cameraArray[cam]->GetViewMatrix());
+	m_pRenderer->UpdateViewMatrix(m_cameraArray[cam]->GetViewMatrix(tickInterpValue));
 	m_pRenderer->Render(&m_drawMeshList);
 }
 
