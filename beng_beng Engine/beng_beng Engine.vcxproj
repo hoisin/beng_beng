@@ -51,6 +51,7 @@
     <ClCompile Include="CTextureManager.cpp" />
     <ClCompile Include="CTimer.cpp" />
     <ClCompile Include="CVertexBuffer.cpp" />
+    <ClCompile Include="CVoxel.cpp" />
     <ClCompile Include="CWorld.cpp" />
     <ClCompile Include="Errors.cpp" />
     <ClCompile Include="main.cpp" />
@@ -88,6 +89,7 @@
     <ClInclude Include="CTextureManager.h" />
     <ClInclude Include="CTimer.h" />
     <ClInclude Include="CVertexBuffer.h" />
+    <ClInclude Include="CVoxel.h" />
     <ClInclude Include="CWorld.h" />
     <ClInclude Include="Errors.h" />
     <ClInclude Include="GfxDefs.h" />

@@ -68,6 +68,9 @@
     <Filter Include="Engine\Graphics\Light">
       <UniqueIdentifier>{2d5f6fe8-9a9b-4fd4-a467-8a71456091df}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Core\Voxel">
+      <UniqueIdentifier>{f5618d30-c678-4efc-9d81-6af7a94d7fb8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -175,6 +178,9 @@
     <ClCompile Include="Errors.cpp">
       <Filter>Engine\Application</Filter>
     </ClCompile>
+    <ClCompile Include="CVoxel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBaseApp.h">
@@ -281,6 +287,9 @@
     </ClInclude>
     <ClInclude Include="Errors.h">
       <Filter>Engine\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="CVoxel.h">
+      <Filter>Engine\Core\Voxel</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
