@@ -346,7 +346,7 @@ bool CApp::OnLoadAssets()
 		return false;
 
 	//ASSETMGR->CreateModelCube(48, 3, eVertexPNT, modelCube_1, myMaterialID_1);
-	error = ASSETMGR->CreateModelCube(6, 2, eVertexPNT, modelCube_2, myMaterialID_1);
+	error = ASSETMGR->CreateModelCube(10, 1, eVertexPNT, modelCube_2, myMaterialID_1);
 	if (IsError(error))
 		return error;
 

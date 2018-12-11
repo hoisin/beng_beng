@@ -95,6 +95,12 @@ bool CWorld::Initialise(const glm::vec3& minBoundary,
 	m_objectMGR.GetObject(objCubeLarge + "_2")->SetLocation(glm::vec3(-75, 20, -75));
 	m_objectMGR.GetObject(objCubeLarge + "_3")->SetLocation(glm::vec3(75, 20, -75));
 
+	CObject* cubeTest = m_objectMGR.CreateObject(EType_Object, "testCube");
+	cubeTest->SetModelID("cube_2");
+	cubeTest->SetActive(true);
+	cubeTest->SetScale(1.0);
+	cubeTest->SetDirection(glm::vec3(0, 0, 0));
+
 	// Plane
 	CObject* planeObject = m_objectMGR.CreateObject(EType_Object, objFloor);
 	planeObject->SetModelID("plane_1");

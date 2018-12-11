@@ -48,74 +48,68 @@ void CPlayerView::VUpdate(float deltaT)
 	m_keyboard.Update(deltaT);
 
 	// Update input
-	m_tickCounter += deltaT;
-	if (m_tickCounter > m_updateTick) 
+	CCameraFPS* cam = (CCameraFPS*)m_pSceneMgr->GetCamera(0);
+	float rotAmt = 3;
+
+	// Mouse handling
+	if (m_mouse.IsMouseButtonDown(eMouseLeft) || m_mouse.IsMouseButtonHeld(eMouseLeft))
 	{
-		CCameraFPS* cam = (CCameraFPS*)m_pSceneMgr->GetCamera(0);
-		float rotAmt = 3;
+		if (m_mouse.IsCursorVisible())
+			m_mouse.ShowCursor(false);
 
-		// Mouse handling
-		if (m_mouse.IsMouseButtonDown(eMouseLeft) || m_mouse.IsMouseButtonHeld(eMouseLeft))
-		{
-			if (m_mouse.IsCursorVisible())
-				m_mouse.ShowCursor(false);
+		int mouseX = m_mouse.GetMousePos().x - m_mouse.GetMouseDownPos(eMouseLeft).x;// m_mouse.GetMousePrevPos().x;
+		int mouseY = m_mouse.GetMousePos().y - m_mouse.GetMouseDownPos(eMouseLeft).y;//m_mouse.GetMousePrevPos().y;
 
-			int mouseX = m_mouse.GetMousePos().x - m_mouse.GetMouseDownPos(eMouseLeft).x;// m_mouse.GetMousePrevPos().x;
-			int mouseY = m_mouse.GetMousePos().y - m_mouse.GetMouseDownPos(eMouseLeft).y;//m_mouse.GetMousePrevPos().y;
+		float d = (deltaT / 1000);
 
-			float d = (deltaT / 1000);
+		cam->RotateYaw(mouseX*rotAmt*d);
+		cam->RotatePitch(mouseY*rotAmt*d);
 
-			cam->RotateYaw(mouseX*rotAmt*d);
-			cam->RotatePitch(mouseY*rotAmt*d);
+		// Reset mouse position
+		m_mouse.SetMouseCursorPos(m_mouse.GetMouseDownPos(eMouseLeft));
+	}
 
-			// Reset mouse position
-			m_mouse.SetMouseCursorPos(m_mouse.GetMouseDownPos(eMouseLeft));
-		}
+	if (m_mouse.IsMouseButtonUp(eMouseLeft))
+	{
+		if (!m_mouse.IsCursorVisible())
+			m_mouse.ShowCursor(true);
+	}
 
-		if (m_mouse.IsMouseButtonUp(eMouseLeft))
-		{
-			if (!m_mouse.IsCursorVisible())
-				m_mouse.ShowCursor(true);
-		}
-
-		float moveAmt = 4;
-		//cam->MoveBack(moveAmt);
-		// Keyboard handling
-		if (m_keyboard.IsKeyDown(VK_LEFT) || m_keyboard.IsKeyHeld(VK_LEFT))
-		{
-			cam->RotateYaw(-3);
-		}
-		if (m_keyboard.IsKeyDown(VK_RIGHT) || m_keyboard.IsKeyHeld(VK_RIGHT))
-		{
-			cam->RotateYaw(3);
-		}
-		if (m_keyboard.IsKeyDown('W') || m_keyboard.IsKeyHeld('W'))
-		{
-			cam->MoveForward(moveAmt);
-		}
-		if (m_keyboard.IsKeyDown('S') || m_keyboard.IsKeyHeld('S'))
-		{
-			cam->MoveBack(moveAmt);
-		}
-		if (m_keyboard.IsKeyDown('A') || m_keyboard.IsKeyHeld('A'))
-		{
-			cam->StrafeLeft(moveAmt);
-		}
-		if (m_keyboard.IsKeyDown('D') || m_keyboard.IsKeyHeld('D'))
-		{
-			cam->StrafeRight(moveAmt);
-		}
-		if (m_keyboard.IsKeyDown(VK_ESCAPE))
-		{
-			m_pApp->CloseRun();
-		}
-
-		m_tickCounter = 0;
+	float moveAmt = 4;
+	//cam->MoveBack(moveAmt);
+	// Keyboard handling
+	if (m_keyboard.IsKeyDown(VK_LEFT) || m_keyboard.IsKeyHeld(VK_LEFT))
+	{
+		cam->RotateYaw(-3);
+	}
+	if (m_keyboard.IsKeyDown(VK_RIGHT) || m_keyboard.IsKeyHeld(VK_RIGHT))
+	{
+		cam->RotateYaw(3);
+	}
+	if (m_keyboard.IsKeyDown('W') || m_keyboard.IsKeyHeld('W'))
+	{
+		cam->MoveForward(moveAmt);
+	}
+	if (m_keyboard.IsKeyDown('S') || m_keyboard.IsKeyHeld('S'))
+	{
+		cam->MoveBack(moveAmt);
+	}
+	if (m_keyboard.IsKeyDown('A') || m_keyboard.IsKeyHeld('A'))
+	{
+		cam->StrafeLeft(moveAmt);
+	}
+	if (m_keyboard.IsKeyDown('D') || m_keyboard.IsKeyHeld('D'))
+	{
+		cam->StrafeRight(moveAmt);
+	}
+	if (m_keyboard.IsKeyDown(VK_ESCAPE))
+	{
+		m_pApp->CloseRun();
 	}
 
 	// Interpolation value probably submitted here
-	int cam = 1;
-	m_pSceneMgr->RenderScene(cam, m_pWorld->GetLastUpdate() / m_pWorld->GetUpdateTick());
+	int camNum = 1;
+	m_pSceneMgr->RenderScene(camNum, m_pWorld->GetLastUpdate() / m_pWorld->GetUpdateTick());
 }
 
 void CPlayerView::SetUpdateTick(float updateTick)
