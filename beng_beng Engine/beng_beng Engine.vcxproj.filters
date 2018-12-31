@@ -179,7 +179,7 @@
       <Filter>Engine\Application</Filter>
     </ClCompile>
     <ClCompile Include="CVoxel.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Engine\Core\Voxel</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

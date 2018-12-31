@@ -39,10 +39,18 @@ public:
 	void CreateChunk(uint xVoxels, uint yVoxels, uint zVoxels);
 	void GenerateMesh();
 
+	int GetVoxelsX();
+	int GetVoxelsY();
+	int GetVoxelsZ();
+
 	float GetVoxelSize() const;
+	void SetPos(const glm::vec3& pos);
+
+	SVoxel* GetVoxel(int x, int y, int z);
 
 protected:
 	SVoxel*** m_pVoxels;
+	glm::ivec3 m_chunkVoxels;
 
 	std::string m_meshID;	// Loaded mesh ID
 	glm::vec3 m_pos;		// World position of this chunk
