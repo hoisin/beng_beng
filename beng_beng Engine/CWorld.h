@@ -10,6 +10,10 @@
 #include "CObjectMGR.h"
 #include "CCamera.h"
 
+#include "CVoxel.h"
+
+#include "CAssetManager.h"
+
 class CWorld
 {
 public:
@@ -67,4 +71,7 @@ protected:
 	float m_updateTick;
 
 	bool m_bUpdated;
+
+public:
+	CChunk chunk;
 };

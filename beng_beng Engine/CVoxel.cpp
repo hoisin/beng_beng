@@ -6,6 +6,15 @@ CChunk::CChunk()
 
 CChunk::~CChunk()
 {
+	for (int z = 0; z < m_chunkVoxels.z; z++)
+	{
+		for (int y = 0; y < m_chunkVoxels.y; y++)
+			delete [] m_pVoxels[z][y];
+		
+		delete [] m_pVoxels[z];
+	}
+
+	delete [] m_pVoxels;
 }
 
 void CChunk::CreateChunk(uint xVoxels, uint yVoxels, uint zVoxels)
@@ -58,6 +67,8 @@ void CChunk::SetPos(const glm::vec3 & pos)
 
 SVoxel * CChunk::GetVoxel(int x, int y, int z)
 {
-	int val1 = z * (m_chunkVoxels.y * m_chunkVoxels.x);
-	return nullptr;
+	if (z > m_chunkVoxels.z || y > m_chunkVoxels.y || x > m_chunkVoxels.x)
+		return nullptr;
+
+	return &m_pVoxels[z][y][x];
 }

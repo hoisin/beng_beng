@@ -354,7 +354,7 @@ bool CApp::OnLoadAssets()
 	if (IsError(error))
 		return error;
 
-	error = ASSETMGR->CreateModelPlane(250, 10, eVertexPNT, modelPlane_1, myMaterialID_2);
+	error = ASSETMGR->CreateModelPlane(500, 10, eVertexPNT, modelPlane_1, myMaterialID_2);
 	if (IsError(error))
 		return error;
 

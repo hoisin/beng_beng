@@ -181,6 +181,9 @@
     <ClCompile Include="CVoxel.cpp">
       <Filter>Engine\Core\Voxel</Filter>
     </ClCompile>
+    <ClCompile Include="CGBuffer.cpp">
+      <Filter>Engine\Graphics\OpenGL\Buffers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBaseApp.h">
@@ -290,6 +293,9 @@
     </ClInclude>
     <ClInclude Include="CVoxel.h">
       <Filter>Engine\Core\Voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="CGBuffer.h">
+      <Filter>Engine\Graphics\OpenGL\Buffers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

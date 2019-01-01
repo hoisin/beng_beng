@@ -266,8 +266,8 @@ struct MeshData
 	// Copy constructor, copies everything including arrays
 	MeshData(const MeshData& other) {
 		m_ID = other.m_ID;
-		pVertices = other.pVertices;
-		pIndices = other.pIndices;
+		//pVertices = other.pVertices;
+		//pIndices = other.pIndices;
 		vertexCount = other.vertexCount;
 		indexCount = other.indexCount;
 		vertexType = other.vertexType;

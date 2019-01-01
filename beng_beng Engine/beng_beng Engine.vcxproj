@@ -26,6 +26,7 @@
     <ClCompile Include="CCollisionShape.cpp" />
     <ClCompile Include="CEmitter.cpp" />
     <ClCompile Include="CFwdRender.cpp" />
+    <ClCompile Include="CGBuffer.cpp" />
     <ClCompile Include="CIndexBuffer.cpp" />
     <ClCompile Include="CKeyboard.cpp" />
     <ClCompile Include="CLightManager.cpp" />
@@ -64,6 +65,7 @@
     <ClInclude Include="CCollisionShape.h" />
     <ClInclude Include="CEmitter.h" />
     <ClInclude Include="CFwdRender.h" />
+    <ClInclude Include="CGBuffer.h" />
     <ClInclude Include="CIndexBuffer.h" />
     <ClInclude Include="CKeyboard.h" />
     <ClInclude Include="CLightManager.h" />

@@ -157,6 +157,22 @@ ErrorId CMeshDataManager::CreateSphere(const std::string& geometryID, float size
 	return ERRORID_NONE;
 }
 
+ErrorId CMeshDataManager::GenerateChunkMesh(const std::string& geometryID, CChunk * pChunk)
+{
+	if (pChunk == nullptr)
+		ERRORID_MESHDATA_NULL_CHUNK;
+
+	if (ExistingMeshDataCheck(geometryID))
+		return ERRORID_MESHDATA_ID_DUPLICATE;
+
+	MeshData* pNewMesh = m_meshDataGenerator.GenerateChunkMesh(pChunk, geometryID);
+	m_meshDataVec.push_back(*pNewMesh);
+
+	delete pNewMesh;
+
+	return ERRORID_NONE;
+}
+
 //-------------------------------------------------------------------------------------
 //
 //	GetMeshData(..)
@@ -191,9 +207,12 @@ MeshData* CMeshDataManager::GetMeshData(const std::string& meshDataID)
 //-------------------------------------------------------------------------------------
 ErrorId CMeshDataManager::RemoveMeshData(const std::string& meshDataID)
 {
-	for (int i = 0; i < (int)m_meshDataVec.size(); i++) {
+	for (int i = 0; i < static_cast<int>(m_meshDataVec.size()); i++) {
 		if (m_meshDataVec[i].m_ID == meshDataID) {
-			std::swap(m_meshDataVec[i], m_meshDataVec.back());
+			// Only swap if current is not the last element
+			if(i != (static_cast<int>(m_meshDataVec.size()) - 1))
+				std::swap(m_meshDataVec[i], m_meshDataVec.back());
+
 			m_meshDataVec.pop_back();
 			return ERRORID_NONE;
 		}

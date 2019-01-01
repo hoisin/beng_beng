@@ -57,7 +57,7 @@ CObject* CObjectMGR::CreateObject(EObjectType objType, const std::string & objID
 //	Returns specified object
 //
 //------------------------------------------------------------------
-CObject * CObjectMGR::GetObject(const std::string & objID)
+CObject * CObjectMGR::Get(const std::string & objID)
 {
 	auto objIT = m_objectMap.find(objID);
 

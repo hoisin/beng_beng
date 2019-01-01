@@ -13,7 +13,7 @@ using namespace std;
 using namespace glm;
 
 // Defines cube size of all voxels
-#define VOXEL_SIZE 10
+#define VOXEL_SIZE 2
 
 enum EBlockType
 {

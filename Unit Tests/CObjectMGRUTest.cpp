@@ -68,7 +68,7 @@ TEST_F(CObjectMGRUTest, GetTests)
 	for (int j = 0; j < testObjCount; j++)
 	{
 		std::string objectID = "object_" + std::to_string(j);
-		EXPECT_NE(nullptr, m_testMgr.GetObject(objectNames[j])) << "Unexpected nullptr for get object " + objectID;
+		EXPECT_NE(nullptr, m_testMgr.Get(objectNames[j])) << "Unexpected nullptr for get object " + objectID;
 	}
 
 	// Get object list
@@ -81,7 +81,7 @@ TEST_F(CObjectMGRUTest, GetTests)
 	for (int k = 0; k < drawObjTotal; k++)
 	{
 		std::string objectID = "object_" + std::to_string(k);
-		CObject* returnObj = m_testMgr.GetObject(objectID);
+		CObject* returnObj = m_testMgr.Get(objectID);
 		returnObj->SetActive(true);
 		returnObj->SetModelID("TestID");	// Doesn't matter that the model ID is the same
 	}
