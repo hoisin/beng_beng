@@ -58,13 +58,13 @@ bool CWorld::Initialise(const glm::vec3& minBoundary,
 	std::string objFloor = "objectFloor";
 
 	// Spheres, currently only 1
-	for (int sphere = 0; sphere < 1; sphere++) {
-		CObject* sphereObj = m_objectMGR.CreateObject(EType_Object, objSphere);
-		sphereObj->SetModelID("sphere_1");
-		sphereObj->SetLocation(glm::vec3(0, 20, -50));
-		sphereObj->SetActive(true);
-		sphereObj->SetFacingDirection(glm::vec3(0, 0, 0));
-	}
+	//for (int sphere = 0; sphere < 1; sphere++) {
+	//	CObject* sphereObj = m_objectMGR.CreateObject(EType_Object, objSphere);
+	//	sphereObj->SetModelID("sphere_1");
+	//	sphereObj->SetLocation(glm::vec3(0, 20, -50));
+	//	sphereObj->SetActive(true);
+	//	sphereObj->SetFacingDirection(glm::vec3(0, 0, 0));
+	//}
 
 	char* l_tempBuffer = new char[10];
 
@@ -81,15 +81,16 @@ bool CWorld::Initialise(const glm::vec3& minBoundary,
 	}*/
 
 	// Large cubes
-	for (int largeCube = 0; largeCube < 4; largeCube++) {
+	for (int largeCube = 0; largeCube < 1; largeCube++) {
 		_itoa_s(largeCube, l_tempBuffer, 10, 10);
 		std::string cubeLargeID = objCubeLarge + "_" + l_tempBuffer;
 		CObject* cubeLargeObject = m_objectMGR.CreateObject(EType_Object, cubeLargeID);
-		cubeLargeObject->SetModelID("cube_1");
+		cubeLargeObject->SetModelID("cube_2");
 		cubeLargeObject->SetActive(true);
 		cubeLargeObject->SetFacingDirection(glm::vec3(0, 0, 0));
 		cubeLargeObject->SetScale(20);
 	}
+
 	m_objectMGR.Get(objCubeLarge + "_0")->SetLocation(glm::vec3(-75, 20, 75));
 	m_objectMGR.Get(objCubeLarge + "_1")->SetLocation(glm::vec3(75, 20, 75));
 	m_objectMGR.Get(objCubeLarge + "_2")->SetLocation(glm::vec3(-75, 20, -75));
@@ -101,7 +102,7 @@ bool CWorld::Initialise(const glm::vec3& minBoundary,
 	cubeTest->SetScale(1.0);
 	cubeTest->SetDirection(glm::vec3(0, 0, 0));
 
-	// Plane
+  // Plane
 	CObject* planeObject = m_objectMGR.CreateObject(EType_Object, objFloor);
 	planeObject->SetModelID("plane_1");
 	planeObject->SetLocation(glm::vec3(0, -10, 0));
@@ -112,10 +113,10 @@ bool CWorld::Initialise(const glm::vec3& minBoundary,
 	l_tempBuffer = nullptr;
 
 	// Create particles
-	PARTICLEMGR->CacheParticles(4000);
+	//PARTICLEMGR->CacheParticles(4000);
 	
 	// Create an emitter
-	CEmitter* pEmitter = (CEmitter*)m_objectMGR.CreateObject(EType_Emitter, "emitter");
+	/*CEmitter* pEmitter = (CEmitter*)m_objectMGR.CreateObject(EType_Emitter, "emitter");
 	pEmitter->SetParticleSpawnPerTick(6);
 	pEmitter->SetParticleSpawnRate(75);
 	pEmitter->SetLocation(glm::vec3(0, 50, -75));
@@ -149,7 +150,7 @@ void CWorld::Update(float deltaT)
 		temp.x = g_angle;
 		temp.y = g_angle;
 		pObj->SetPrevRotation(pObj->GetRotation());
-		pObj->SetRotation(temp);
+		pObj->SetRotation(temp);*/
 		//------------------------------------------------------------------ -
 
 		std::list<CObject*> objList;

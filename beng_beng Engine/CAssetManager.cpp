@@ -166,9 +166,9 @@ bool CAssetManager::LoadModel(const std::string& fileDir, const std::string& fil
 	return result;
 }
 
-ErrorId CAssetManager::CreateModelCube(int size, int subDiv, EVertexType vertType, const std::string & modelID, const std::string& materialID)
+ErrorId CAssetManager::CreateModelCube(float size, int subDiv, EVertexType vertType, const std::string & modelID, const std::string& materialID)
 {
-	ErrorId error = m_meshDataMgr.CreateCube(modelID, (float)size, vertType, subDiv);
+	ErrorId error = m_meshDataMgr.CreateCube(modelID, size, vertType, subDiv);
 	if (IsNoError(error)) 
 	{
 		CModel* pNewModel = m_modelMgr.CreateModel(modelID);
@@ -186,7 +186,7 @@ ErrorId CAssetManager::CreateModelCube(int size, int subDiv, EVertexType vertTyp
 	return error;
 }
 
-ErrorId CAssetManager::CreateModelSphere(int size, int subDiv, EVertexType vertType, const std::string & modelID, const std::string& materialID)
+ErrorId CAssetManager::CreateModelSphere(float size, int subDiv, EVertexType vertType, const std::string & modelID, const std::string& materialID)
 {
 	ErrorId error = m_meshDataMgr.CreateSphere(modelID, (float)size, vertType, subDiv);
 	if (IsNoError(error))
@@ -206,7 +206,7 @@ ErrorId CAssetManager::CreateModelSphere(int size, int subDiv, EVertexType vertT
 	return error;
 }
 
-ErrorId CAssetManager::CreateModelPlane(int size, int subDiv, EVertexType vertType, const std::string & modelID, const std::string& materialID)
+ErrorId CAssetManager::CreateModelPlane(float size, int subDiv, EVertexType vertType, const std::string & modelID, const std::string& materialID)
 {
 	ErrorId error = m_meshDataMgr.CreatePlane(modelID, (float)size, vertType, subDiv);
 	if (IsNoError(error))

@@ -87,6 +87,9 @@ void CSceneManager::RenderScene(int cameraNo, float tickInterpValue)
 {
 	ClearDrawList();
 
+	if (tickInterpValue > 1.0)
+		tickInterpValue = 1.0;
+
 	auto drawObjIT = m_objDrawList.begin();
 	while (drawObjIT != m_objDrawList.end()) {
 		SDrawMesh* newDrawMesh = new SDrawMesh;

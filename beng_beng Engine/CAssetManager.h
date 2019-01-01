@@ -46,9 +46,9 @@ public:
 
 	// Create models
 	bool LoadModel(const std::string& fileDir, const std::string& fileName, const std::string& modelID);
-	ErrorId CreateModelCube(int size, int subDiv, EVertexType vertType, const std::string& modelID, const std::string& materialID);
-	ErrorId CreateModelSphere(int size, int subDiv, EVertexType vertType, const std::string& modelID, const std::string& materialID);
-	ErrorId CreateModelPlane(int size, int subDiv, EVertexType vertType, const std::string& modelID, const std::string& materialID);
+	ErrorId CreateModelCube(float size, int subDiv, EVertexType vertType, const std::string& modelID, const std::string& materialID);
+	ErrorId CreateModelSphere(float size, int subDiv, EVertexType vertType, const std::string& modelID, const std::string& materialID);
+	ErrorId CreateModelPlane(float size, int subDiv, EVertexType vertType, const std::string& modelID, const std::string& materialID);
 
 	// Generating/loading mesh data
 	//	- Load/Generating mesh data CPU side

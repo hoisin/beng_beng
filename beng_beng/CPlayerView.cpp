@@ -107,6 +107,7 @@ void CPlayerView::VUpdate(float deltaT)
 		m_pApp->CloseRun();
 	}
 
+
 	// Interpolation value probably submitted here
 	int camNum = 1;
 	m_pSceneMgr->RenderScene(camNum, m_pWorld->GetLastUpdate() / m_pWorld->GetUpdateTick());
