@@ -90,16 +90,22 @@ bool CWorld::Initialise(const glm::vec3& minBoundary,
 		cubeLargeObject->SetFacingDirection(glm::vec3(0, 0, 0));
 		cubeLargeObject->SetScale(20);
 	}
-	m_objectMGR.GetObject(objCubeLarge + "_0")->SetLocation(glm::vec3(0, 0, 0));
-	//m_objectMGR.GetObject(objCubeLarge + "_0")->SetLocation(glm::vec3(-75, 20, 75));
-	//m_objectMGR.GetObject(objCubeLarge + "_1")->SetLocation(glm::vec3(75, 20, 75));
-	//m_objectMGR.GetObject(objCubeLarge + "_2")->SetLocation(glm::vec3(-75, 20, -75));
-	//m_objectMGR.GetObject(objCubeLarge + "_3")->SetLocation(glm::vec3(75, 20, -75));
 
-	// Plane
+	m_objectMGR.Get(objCubeLarge + "_0")->SetLocation(glm::vec3(-75, 20, 75));
+	m_objectMGR.Get(objCubeLarge + "_1")->SetLocation(glm::vec3(75, 20, 75));
+	m_objectMGR.Get(objCubeLarge + "_2")->SetLocation(glm::vec3(-75, 20, -75));
+	m_objectMGR.Get(objCubeLarge + "_3")->SetLocation(glm::vec3(75, 20, -75));
+
+	CObject* cubeTest = m_objectMGR.CreateObject(EType_Object, "testCube");
+	cubeTest->SetModelID("cube_2");
+	cubeTest->SetActive(true);
+	cubeTest->SetScale(1.0);
+	cubeTest->SetDirection(glm::vec3(0, 0, 0));
+
+  // Plane
 	CObject* planeObject = m_objectMGR.CreateObject(EType_Object, objFloor);
 	planeObject->SetModelID("plane_1");
-	planeObject->SetLocation(glm::vec3(0, 0, 0));
+	planeObject->SetLocation(glm::vec3(0, -10, 0));
 	planeObject->SetActive(true);
 	planeObject->SetFacingDirection(glm::vec3(0, 0, 0));
 
@@ -114,8 +120,15 @@ bool CWorld::Initialise(const glm::vec3& minBoundary,
 	pEmitter->SetParticleSpawnPerTick(6);
 	pEmitter->SetParticleSpawnRate(75);
 	pEmitter->SetLocation(glm::vec3(0, 50, -75));
-	pEmitter->SetFacingDirection(glm::vec3(0, 0, 0));*/
-	
+	pEmitter->SetFacingDirection(glm::vec3(0, 0, 0));
+
+	chunk.CreateChunk(10, 10, 10);
+	chunk.GetVoxel(0, 0, 0)->bActive = false;
+	chunk.GetVoxel(9, 9, 9)->bActive = false;
+	ASSETMGR->GenerateChunkMesh(&chunk, "my_chunk");
+	ASSETMGR->CreateModel("chunk_model");
+	ASSETMGR->AddMeshToModel("chunk_model", "my_chunk", "material_1", true);
+
 	return true;
 }
 
@@ -132,7 +145,7 @@ void CWorld::Update(float deltaT)
 	if (m_lastUpdate >= m_updateTick) {
 		// -------------------------------------------------------------------
 		// Test code
-		/*CObject* pObj = m_objectMGR.GetObject("objectSphere");
+		CObject* pObj = m_objectMGR.Get("objectSphere");
 		glm::vec3 temp;
 		temp.x = g_angle;
 		temp.y = g_angle;

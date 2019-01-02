@@ -57,8 +57,8 @@ void CPlayerView::VUpdate(float deltaT)
 		if (m_mouse.IsCursorVisible())
 			m_mouse.ShowCursor(false);
 
-		int mouseX = m_mouse.GetMousePos().x - m_mouse.GetMouseDownPos(eMouseLeft).x;
-		int mouseY = m_mouse.GetMousePos().y - m_mouse.GetMouseDownPos(eMouseLeft).y;
+		int mouseX = m_mouse.GetMousePos().x - m_mouse.GetMouseDownPos(eMouseLeft).x;// m_mouse.GetMousePrevPos().x;
+		int mouseY = m_mouse.GetMousePos().y - m_mouse.GetMouseDownPos(eMouseLeft).y;//m_mouse.GetMousePrevPos().y;
 
 		float d = (deltaT / 1000);
 
@@ -76,6 +76,7 @@ void CPlayerView::VUpdate(float deltaT)
 	}
 
 	float moveAmt = 4;
+	//cam->MoveBack(moveAmt);
 	// Keyboard handling
 	if (m_keyboard.IsKeyDown(VK_LEFT) || m_keyboard.IsKeyHeld(VK_LEFT))
 	{

@@ -85,6 +85,24 @@ int CModelManager::GetModelCount() const
 	return (int)m_models.size();
 }
 
+ErrorId CModelManager::RemoveModel(const std::string & modelID)
+{
+	for (int i = 0; i < static_cast<int>(m_models.size()); i++)
+	{
+		if (m_models[i].GetID() == modelID)
+		{
+			if (i != (static_cast<int>(m_models.size()) - 1))
+				std::swap(m_models[i], m_models.back());
+
+			m_models[i].CleanUp();
+			m_models.pop_back();
+			return ERRORID_NONE;
+		}
+	}
+
+	return ERRORID_MODEL_REMOVE_MODEL_FAILED;
+}
+
 void CModelManager::CleanUp()
 {
 	for (int i = 0; i < m_models.size(); i++)

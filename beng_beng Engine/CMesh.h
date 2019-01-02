@@ -28,6 +28,7 @@ public:
 	~CMesh();
 
 	ErrorId LoadMesh(MeshData* pData, const std::string& materialID);
+	ErrorId LoadMesh(MeshData* pData);
 
 	bool IsLoaded() const;
 	const std::string& GetMaterialID();
@@ -36,6 +37,8 @@ public:
 	CIndexBuffer* GetIndexBuffer();
 
 	MeshData* GetMeshData();
+
+	void UnloadBuffers();
 
 	void CleanUp();
 

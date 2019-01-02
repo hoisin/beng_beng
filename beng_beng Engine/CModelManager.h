@@ -28,6 +28,8 @@ public:
 
 	int GetModelCount() const;
 
+	ErrorId RemoveModel(const std::string& modelID);
+
 	void CleanUp();
 
 protected:

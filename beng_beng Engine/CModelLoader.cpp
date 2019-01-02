@@ -126,11 +126,15 @@ CModel * CModelLoader::Load(const std::string & fileDir, const std::string& file
 					std::string meshStr = std::to_string((long double)meshNum);
 					m_pMeshDataMgr->AddMeshData(pNewMeshData, meshName + meshStr);
 					pModel->AddMesh(pNewMeshData, meshMatID);
+					// Finished with meshdata, remove it from memory
+					m_pMeshDataMgr->RemoveMeshData(meshName + meshStr);
 				}
 				else
 				{
 					m_pMeshDataMgr->AddMeshData(pNewMeshData, mesh->mName.C_Str());
 					pModel->AddMesh(pNewMeshData, meshMatID);
+					// Finished with meshdata, remove it from memory
+					m_pMeshDataMgr->RemoveMeshData(mesh->mName.C_Str());
 				}
 
 				if (pNewMeshData)

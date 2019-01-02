@@ -38,6 +38,8 @@ public:
 	ErrorId CreateSphere(const std::string& geometryID, float size, EVertexType type, unsigned int subDivisions = 1,
 		const glm::vec4& colour = glm::vec4(0, 0, 0, 0));
 
+	ErrorId GenerateChunkMesh(const std::string& geometryID, CChunk* pChunk);
+
 	MeshData* GetMeshData(const std::string& meshDataID);
 	ErrorId RemoveMeshData(const std::string& meshDataID);
 

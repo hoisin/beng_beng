@@ -1,4 +1,5 @@
 #include "CMeshDataGenerator.h"
+#include "CVoxel.h"
 
 CMeshDataGenerator::CMeshDataGenerator()
 {
@@ -1470,6 +1471,322 @@ MeshData* CMeshDataGenerator::CreateSphere(const std::string &geometryID, float 
 	return pNewMesh;
 }
 
+MeshData * CMeshDataGenerator::GenerateChunkMesh(CChunk * pChunk, const std::string & geometryID)
+{
+	if (pChunk == nullptr)
+		return nullptr;
+
+	// Method 1:
+	// Count number of active voxels.
+	// Assume each one will use a cube
+	// Generate array for enough space for all the cubes.
+	std::vector<glm::ivec3> voxelList;
+
+	// Find which voxels are required for the mesh generation
+	for (int z = 0; z < pChunk->GetVoxelsZ(); z++)
+	{
+		for (int y = 0; y < pChunk->GetVoxelsY(); y++)
+		{
+			for (int x = 0; x < pChunk->GetVoxelsX(); x++)
+			{
+				// If active
+				if (pChunk->GetVoxel(x, y, z)->bActive)
+				{
+					voxelList.push_back(glm::ivec3(x + 1, y + 1, z + 1));
+					// Initial optimisation would be to check for surrounding voxels.
+					// If completely surrounded, it would be hidden
+				}
+			}
+		}
+	}
+
+	MeshData* pNewMesh = new MeshData(EVertexType::eVertexPNT, (voxelList.size() * 24), (voxelList.size() * 36));
+	pNewMesh->m_ID = geometryID;
+
+	// Now we have all the visible voxels, loop and generate the chunk mesh for them
+	float voxelSize = VOXEL_SIZE;
+	float minX = ((voxelSize * pChunk->GetVoxelsX()) / 2) * -1;
+	float minY = ((voxelSize * pChunk->GetVoxelsY()) / 2) * -1;
+	float minZ = ((voxelSize * pChunk->GetVoxelsZ()) / 2) * -1;
+
+	int vertCounter = 0;
+	SVertexTypePNT *pVert = static_cast<SVertexTypePNT*>(pNewMesh->pVertices);
+	for (int i = 0; i < static_cast<int>(voxelList.size()); i++)
+	{
+		int vX = voxelList[i].x;
+		int vY = voxelList[i].y;
+		int vZ = voxelList[i].z;
+
+		// Front
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1));
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1));
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1));
+		pVert[vertCounter].normal.x = 0;
+		pVert[vertCounter].normal.y = 0;
+		pVert[vertCounter].normal.z = 1;
+		pVert[vertCounter].textureCoord.x = 0;
+		pVert[vertCounter].textureCoord.y = 1;
+		vertCounter++;
+
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1)) + voxelSize;
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1));
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1));
+		pVert[vertCounter].normal.x = 0;
+		pVert[vertCounter].normal.y = 0;
+		pVert[vertCounter].normal.z = 1;
+		pVert[vertCounter].textureCoord.x = 1;
+		pVert[vertCounter].textureCoord.y = 1;
+		vertCounter++;
+
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1));
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1)) - voxelSize;
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1));
+		pVert[vertCounter].normal.x = 0;
+		pVert[vertCounter].normal.y = 0;
+		pVert[vertCounter].normal.z = 1;
+		pVert[vertCounter].textureCoord.x = 0;
+		pVert[vertCounter].textureCoord.y = 0;
+		vertCounter++;
+
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1)) + voxelSize;
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1)) - voxelSize;
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1));
+		pVert[vertCounter].normal.x = 0;
+		pVert[vertCounter].normal.y = 0;
+		pVert[vertCounter].normal.z = 1;
+		pVert[vertCounter].textureCoord.x = 1;
+		pVert[vertCounter].textureCoord.y = 0;
+		vertCounter++;
+
+		// Bottom
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1));
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1)) - voxelSize;
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1));
+		pVert[vertCounter].normal.x = 0;
+		pVert[vertCounter].normal.y = -1;
+		pVert[vertCounter].normal.z = 0;
+		pVert[vertCounter].textureCoord.x = 0;
+		pVert[vertCounter].textureCoord.y = 1;
+		vertCounter++;
+
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1)) + voxelSize;
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1)) - voxelSize;
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1));
+		pVert[vertCounter].normal.x = 0;
+		pVert[vertCounter].normal.y = -1;
+		pVert[vertCounter].normal.z = 0;
+		pVert[vertCounter].textureCoord.x = 1;
+		pVert[vertCounter].textureCoord.y = 1;
+		vertCounter++;
+
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1));
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1)) - voxelSize;
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1)) - voxelSize;
+		pVert[vertCounter].normal.x = 0;
+		pVert[vertCounter].normal.y = -1;
+		pVert[vertCounter].normal.z = 0;
+		pVert[vertCounter].textureCoord.x = 0;
+		pVert[vertCounter].textureCoord.y = 0;
+		vertCounter++;
+
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1)) + voxelSize;
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1)) - voxelSize;
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1)) - voxelSize;
+		pVert[vertCounter].normal.x = 0;
+		pVert[vertCounter].normal.y = -1;
+		pVert[vertCounter].normal.z = 0;
+		pVert[vertCounter].textureCoord.x = 1;
+		pVert[vertCounter].textureCoord.y = 0;
+		vertCounter++;
+
+		// Left 
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1));
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1));
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1)) - voxelSize;
+		pVert[vertCounter].normal.x = -1;
+		pVert[vertCounter].normal.y = 0;
+		pVert[vertCounter].normal.z = 0;
+		pVert[vertCounter].textureCoord.x = 0;
+		pVert[vertCounter].textureCoord.y = 1;
+		vertCounter++;
+
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1));
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1));
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1));
+		pVert[vertCounter].normal.x = -1;
+		pVert[vertCounter].normal.y = 0;
+		pVert[vertCounter].normal.z = 0;
+		pVert[vertCounter].textureCoord.x = 1;
+		pVert[vertCounter].textureCoord.y = 1;
+		vertCounter++;
+
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1));
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1)) - voxelSize;
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1)) - voxelSize;
+		pVert[vertCounter].normal.x = -1;
+		pVert[vertCounter].normal.y = 0;
+		pVert[vertCounter].normal.z = 0;
+		pVert[vertCounter].textureCoord.x = 0;
+		pVert[vertCounter].textureCoord.y = 0;
+		vertCounter++;
+
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1));
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1)) - voxelSize;
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1));
+		pVert[vertCounter].normal.x = -1;
+		pVert[vertCounter].normal.y = 0;
+		pVert[vertCounter].normal.z = 0;
+		pVert[vertCounter].textureCoord.x = 1;
+		pVert[vertCounter].textureCoord.y = 0;
+		vertCounter++;
+
+		// Back
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1)) + voxelSize;
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1));
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1)) - voxelSize;
+		pVert[vertCounter].normal.x = 0;
+		pVert[vertCounter].normal.y = 0;
+		pVert[vertCounter].normal.z = -1;
+		pVert[vertCounter].textureCoord.x = 0;
+		pVert[vertCounter].textureCoord.y = 1;
+		vertCounter++;
+
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1));
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1));
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1)) - voxelSize;
+		pVert[vertCounter].normal.x = 0;
+		pVert[vertCounter].normal.y = 0;
+		pVert[vertCounter].normal.z = -1;
+		pVert[vertCounter].textureCoord.x = 1;
+		pVert[vertCounter].textureCoord.y = 1;
+		vertCounter++;
+
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1)) + voxelSize;
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1)) - voxelSize;
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1)) - voxelSize;
+		pVert[vertCounter].normal.x = 0;
+		pVert[vertCounter].normal.y = 0;
+		pVert[vertCounter].normal.z = -1;
+		pVert[vertCounter].textureCoord.x = 0;
+		pVert[vertCounter].textureCoord.y = 0;
+		vertCounter++;
+
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1));
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1)) - voxelSize;
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1)) - voxelSize;
+		pVert[vertCounter].normal.x = 0;
+		pVert[vertCounter].normal.y = 0;
+		pVert[vertCounter].normal.z = -1;
+		pVert[vertCounter].textureCoord.x = 1;
+		pVert[vertCounter].textureCoord.y = 0;
+		vertCounter++;
+
+		// Right
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1)) + voxelSize;
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1));
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1));
+		pVert[vertCounter].normal.x = 1;
+		pVert[vertCounter].normal.y = 0;
+		pVert[vertCounter].normal.z = 0;
+		pVert[vertCounter].textureCoord.x = 0;
+		pVert[vertCounter].textureCoord.y = 1;
+		vertCounter++;
+
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1)) + voxelSize;
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1));
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1)) - voxelSize;
+		pVert[vertCounter].normal.x = 1;
+		pVert[vertCounter].normal.y = 0;
+		pVert[vertCounter].normal.z = 0;
+		pVert[vertCounter].textureCoord.x = 1;
+		pVert[vertCounter].textureCoord.y = 1;
+		vertCounter++;
+
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1)) + voxelSize;
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1)) - voxelSize;
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1));
+		pVert[vertCounter].normal.x = 1;
+		pVert[vertCounter].normal.y = 0;
+		pVert[vertCounter].normal.z = 0;
+		pVert[vertCounter].textureCoord.x = 0;
+		pVert[vertCounter].textureCoord.y = 0;
+		vertCounter++;
+
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1)) + voxelSize;
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1)) - voxelSize;
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1)) - voxelSize;
+		pVert[vertCounter].normal.x = 1;
+		pVert[vertCounter].normal.y = 0;
+		pVert[vertCounter].normal.z = 0;
+		pVert[vertCounter].textureCoord.x = 1;
+		pVert[vertCounter].textureCoord.y = 0;
+		vertCounter++;
+
+		// Top
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1));
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1));
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1)) - voxelSize;
+		pVert[vertCounter].normal.x = 0;
+		pVert[vertCounter].normal.y = 1;
+		pVert[vertCounter].normal.z = 0;
+		pVert[vertCounter].textureCoord.x = 0;
+		pVert[vertCounter].textureCoord.y = 1;
+		vertCounter++;
+
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1)) + voxelSize;
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1));
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1)) - voxelSize;
+		pVert[vertCounter].normal.x = 0;
+		pVert[vertCounter].normal.y = 1;
+		pVert[vertCounter].normal.z = 0;
+		pVert[vertCounter].textureCoord.x = 1;
+		pVert[vertCounter].textureCoord.y = 1;
+		vertCounter++;
+
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1));
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1));
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1));
+		pVert[vertCounter].normal.x = 0;
+		pVert[vertCounter].normal.y = 1;
+		pVert[vertCounter].normal.z = 0;
+		pVert[vertCounter].textureCoord.x = 0;
+		pVert[vertCounter].textureCoord.y = 0;
+		vertCounter++;
+
+		pVert[vertCounter].position.x = minX + (voxelSize * (vX - 1)) + voxelSize;
+		pVert[vertCounter].position.y = (minY * -1) - (voxelSize * (vY - 1));
+		pVert[vertCounter].position.z = (minZ * -1) - (voxelSize * (vZ - 1));
+		pVert[vertCounter].normal.x = 0;
+		pVert[vertCounter].normal.y = 1;
+		pVert[vertCounter].normal.z = 0;
+		pVert[vertCounter].textureCoord.x = 1;
+		pVert[vertCounter].textureCoord.y = 0;
+		vertCounter++;
+	}
+
+	// 36 indices per cube @ 2 triangles per face
+	GLuint* pIdx = pNewMesh->pIndices;
+	int vertId = 0;
+	for (int j = 0; j < pNewMesh->indexCount;)
+	{
+		pIdx[j] = vertId;
+		pIdx[j+1] = vertId + 2;
+		pIdx[j+2] = vertId + 3;
+
+		pIdx[j+3] = vertId;
+		pIdx[j+4] = vertId + 3;
+		pIdx[j+5] = vertId + 1;
+
+		// Increment index counter
+		j += 6;
+
+		// Next set of vertices
+		vertId += 4;
+	}
+
+	return pNewMesh;
+}
+
 
 //-------------------------------------------------------------------------------------
 //
@@ -1516,6 +1833,7 @@ void CMeshDataGenerator::CalculateNormals(MeshData* pMeshData)
 					pVertPNC[pMeshData->pIndices[(triangle * 3) + 1]].normal += normal;
 					pVertPNC[pMeshData->pIndices[(triangle * 3) + 2]].normal += normal;
 				}
+		
 				break;
 			case eVertexPNT:
 				{

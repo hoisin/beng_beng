@@ -176,9 +176,11 @@ ErrorId CAssetManager::CreateModelCube(float size, int subDiv, EVertexType vertT
 			error = pNewModel->AddMesh(m_meshDataMgr.GetMeshData(modelID), materialID);
 		else
 		{
-			m_meshDataMgr.RemoveMeshData(modelID);
-			return ERRORID_ASSET_CREATESHAPE_FAILED;
+			m_modelMgr.RemoveModel(modelID);
+			error = ERRORID_ASSET_CREATESHAPE_FAILED;
 		}
+
+		m_meshDataMgr.RemoveMeshData(modelID);
 	}
 
 	return error;
@@ -194,9 +196,11 @@ ErrorId CAssetManager::CreateModelSphere(float size, int subDiv, EVertexType ver
 			error = pNewModel->AddMesh(m_meshDataMgr.GetMeshData(modelID), materialID);
 		else
 		{
-			m_meshDataMgr.RemoveMeshData(modelID);
+			m_modelMgr.RemoveModel(modelID);
 			return ERRORID_ASSET_CREATESHAPE_FAILED;
 		}
+
+		m_meshDataMgr.RemoveMeshData(modelID);
 	}
 
 	return error;
@@ -212,9 +216,11 @@ ErrorId CAssetManager::CreateModelPlane(float size, int subDiv, EVertexType vert
 			error = pNewModel->AddMesh(m_meshDataMgr.GetMeshData(modelID), materialID);
 		else
 		{
-			m_meshDataMgr.RemoveMeshData(modelID);
+			m_modelMgr.RemoveModel(modelID);
 			return ERRORID_ASSET_CREATESHAPE_FAILED;
 		}
+
+		m_meshDataMgr.RemoveMeshData(modelID);
 	}
 
 	return error;
@@ -272,6 +278,11 @@ ErrorId CAssetManager::CreateSphereMeshData(int size, int subDiv, EVertexType ve
 ErrorId CAssetManager::CreatePlaneMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID)
 {
 	return m_meshDataMgr.CreatePlane(meshDataID, (float)size, vertType, subDiv);
+}
+
+ErrorId CAssetManager::GenerateChunkMesh(CChunk * pChunk, const std::string& meshDataID)
+{
+	return m_meshDataMgr.GenerateChunkMesh(meshDataID, pChunk);
 }
 
 //------------------------------------------------------------------
@@ -353,16 +364,27 @@ CModel * CAssetManager::GetModel(const std::string & modelID)
 //
 //------------------------------------------------------------------
 ErrorId CAssetManager::AddMeshToModel(const std::string & modelID, const std::string & meshDataID,
-	const std::string& meshMaterialID)
+	const std::string& meshMaterialID, bool bDeleteMeshData)
 {
 	CModel* pModel = m_modelMgr.GetModel(modelID);
 	if (pModel != nullptr)
 	{
 		MeshData* pData = m_meshDataMgr.GetMeshData(meshDataID);
 		if (pData != nullptr)
-			return pModel->AddMesh(pData, meshMaterialID);
+		{
+			ErrorId error = pModel->AddMesh(pData, meshMaterialID);
+			if (IsNoError(error))
+			{
+				if (bDeleteMeshData)
+					error = m_meshDataMgr.RemoveMeshData(meshDataID);
+				
+				return error;
+			}
+		}
 		
+		return ERRORID_ASSET_ADDMESH_MESHDATAID_NOT_FOUND;
 	}
-	return ERRORID_NONE; // CHANGE THIS!!!!!!!!!!!!!!!!!
+
+	return ERRORID_ASSET_ADDMESH_MODELID_NOT_FOUND;
 }
 

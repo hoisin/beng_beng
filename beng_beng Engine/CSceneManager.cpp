@@ -112,6 +112,15 @@ void CSceneManager::RenderScene(int cameraNo, float tickInterpValue)
 		++drawObjIT;
 	}
 
+	// Testing
+	SDrawMesh* testChunk = new SDrawMesh;
+	testChunk->m_meshID = "chunk_model";
+	testChunk->m_position.x = 0;
+	testChunk->m_position.y = 30;
+	testChunk->m_position.z = 0;
+	testChunk->m_scale = 1.0;
+	m_drawMeshList.push_back(testChunk);
+
 	int cam = cameraNo - 1;
 	m_pRenderer->UpdateProjMatrix(m_cameraArray[cam]->GetProjectionMatrix());
 	m_pRenderer->UpdateViewMatrix(m_cameraArray[cam]->GetViewMatrix(tickInterpValue));

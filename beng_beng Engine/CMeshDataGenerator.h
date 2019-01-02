@@ -18,6 +18,8 @@
 
 #include "GfxDefs.h"
 
+class CChunk;
+
 class CMeshDataGenerator
 {
 public:
@@ -43,6 +45,8 @@ public:
 	// Creates a sphere
 	MeshData* CreateSphere(const std::string &geometryID, float size, EVertexType type, unsigned int subDivisions = 1,
 		const glm::vec4 &colour = glm::vec4(0, 0, 0, 0));
+
+	MeshData* GenerateChunkMesh(CChunk* pChunk, const std::string& geometryID = "");
 
 private:
 	void CalculateNormals(MeshData* pMeshData);

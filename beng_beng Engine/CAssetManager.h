@@ -59,6 +59,8 @@ public:
 	ErrorId CreateSphereMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID);
 	ErrorId CreatePlaneMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID);
 
+	ErrorId GenerateChunkMesh(CChunk* pChunk, const std::string& meshDataID);
+
 	MeshData* GetMeshData(const std::string& meshDataID);
 
 	CFwdRender* GetFwdRenderTech();
@@ -68,7 +70,7 @@ public:
 	CModel* GetModel(const std::string& modelID);
 
 	ErrorId AddMeshToModel(const std::string& modelID, const std::string& meshDataID,
-		const std::string& meshMaterialID);
+		const std::string& meshMaterialID, bool bDeleteMeshData = false);
 
 protected:
 	CAssetManager();

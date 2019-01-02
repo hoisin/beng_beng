@@ -20,7 +20,7 @@ public:
 
 	CObject* CreateObject(EObjectType objType, const std::string& objID);
 
-	CObject* GetObject(const std::string& objID);
+	CObject* Get(const std::string& objID);
 	bool GetObjectList(std::list<CObject*>* objectList);
 	bool GetDrawObjectList(std::list<CObject*>* objectList);
 
