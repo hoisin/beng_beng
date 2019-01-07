@@ -39,11 +39,6 @@ void CPlayerView::VUpdate(float deltaT)
 	//
 	// Call scene manager Render()/Display()
 
-	// Update the scene when world has been updated
-	if (m_pWorld->IsUpdated()) {
-		m_pSceneMgr->UpdateScene(m_pWorld);
-	}
-
 	m_mouse.Update(deltaT);
 	m_keyboard.Update(deltaT);
 
@@ -107,6 +102,10 @@ void CPlayerView::VUpdate(float deltaT)
 		m_pApp->CloseRun();
 	}
 
+	// Update the scene when world has been updated
+	//if (m_pWorld->IsUpdated()) {
+		m_pSceneMgr->UpdateScene(m_pWorld);
+	//}
 
 	// Interpolation value probably submitted here
 	int camNum = 1;
