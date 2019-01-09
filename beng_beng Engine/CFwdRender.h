@@ -34,6 +34,9 @@ public:
 
 	void SetDiffuseTexture(GLuint textureID);
 
+	void SetPointLight(const glm::vec3& pos, const glm::vec3& color,
+		float lightIntensity, float attenuation);
+
 	void operator=(const CFwdRender& other);
 
 	const std::string& GetVertexShaderPath() const;
@@ -44,6 +47,11 @@ private:
 	GLuint m_worldMatLoc;
 	GLuint m_invWorldMatLoc;
 	GLuint m_diffuseTexSamplerLoc;
+
+	GLuint m_pointLightLoc;
+	GLuint m_lightColorLoc;
+	GLuint m_lightIntensityLoc;
+	GLuint m_lightAttenuationLoc;
 
 	std::string m_vertexShaderPath;
 	std::string m_fragmentShaderPath;

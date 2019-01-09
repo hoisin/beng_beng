@@ -59,6 +59,7 @@ public:
 	ErrorId CreateSphereMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID);
 	ErrorId CreatePlaneMeshData(int size, int subDiv, EVertexType vertType, const std::string& meshDataID);
 
+	// Voxel methods
 	ErrorId GenerateChunkMesh(CChunk* pChunk, const std::string& meshDataID);
 
 	MeshData* GetMeshData(const std::string& meshDataID);
@@ -69,6 +70,7 @@ public:
 	bool CreateModel(const std::string& modelID);
 	CModel* GetModel(const std::string& modelID);
 
+	// Helper method for attaching mesh to model
 	ErrorId AddMeshToModel(const std::string& modelID, const std::string& meshDataID,
 		const std::string& meshMaterialID, bool bDeleteMeshData = false);
 

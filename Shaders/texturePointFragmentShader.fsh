@@ -10,14 +10,35 @@ in vec2 UV;
 out vec3 color;
 
 uniform sampler2D diffuseTextureSampler;
-uniform vec3 spotLights[MAX_SPOT_LIGHTS];
-uniform vec3 pointLights[MAX_POINT_LIGHTS];
-uniform vec3 directionLight;
+//uniform vec3 spotLights[MAX_SPOT_LIGHTS];
+//uniform vec3 pointLights[MAX_POINT_LIGHTS];
+//uniform vec3 directionLight;
 uniform vec3 ambientLightCol;
+
+// Testing
+uniform vec3 pointLight;
+uniform vec3 lightColor;
+uniform float lightIntensity;
+uniform float attenuation;
 
 void main() 
 {
 	vec3 normal = normalize(norm);
+	
+	// Testing
+	
+	vec3 lightDir = pointLight - pos.xyz;
+	float length = length(lightDir);
+	lightDir = normalize(lightDir);
+	
+	float atten = clamp((attenuation - length) / attenuation, 0, 1);
+	
+	float lamb = max(dot(normal, lightDir), 0.0) * atten * lightIntensity;
+	
+	color = lamb * texture( diffuseTextureSampler, UV).rgb * lightColor;
+	
+	// EOF Testing
+	/*
 	vec3 lightDirs[MAX_POINT_LIGHTS];
 	lightDirs[0] = vec3(100,50,100);
 	lightDirs[1] = vec3(100,50,-100);
@@ -25,7 +46,8 @@ void main()
 	lightDirs[3] = vec3(-100,50,100);
 	
 	vec3 colour = vec3(0,0,0);
-	for(int i = 0; i < MAX_POINT_LIGHTS; i++) {
+	for(int i = 0; i < MAX_POINT_LIGHTS; i++) 
+	{
 		vec3 lightDir = lightDirs[i] - pos.xyz;
 		
 		float length = length(lightDir);
@@ -39,8 +61,9 @@ void main()
 		// Cumulate lighting
 		colour += lamb * texture( diffuseTextureSampler, UV ).rgb; // * light colour
 	}
+	
 	// add ambient colour last
 	color = vec3(0.1,0,0) + colour;
 	//color = texture( diffuseTextureSampler, UV ).rgb;
-
+	*/
 }

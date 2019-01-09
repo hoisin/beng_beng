@@ -14,7 +14,7 @@
 #include "CTexture2D.h"
 
 
-CRenderer::CRenderer()
+CRenderer::CRenderer() : m_bWireFrame(false)
 {
 }
 
@@ -89,34 +89,6 @@ void CRenderer::ResizeViewPort(UINT windowWidth, UINT windowHeight)
 //------------------------------------------------------------------
 void CRenderer::Render(const DrawMeshList* drawMeshList)
 {
-	// Expecting a 'Draw list' of things to draw
-	// 
-	// This list should contain something like a list of mesh IDs, position and rotation value.
-	// The material should be defined already by the CMesh's sub meshes.
-	//
-	// Material is defined as the shader parameters + the texture to apply.
-	//
-	// The shader to use atm should be the same for everything until we have further development.
-	//
-	// Therefore the following should occur:
-	//
-	// - Loop through list of draw items
-	// - For each draw item get the mesh ID
-	// - For the current mesh, loop through its sub-meshes
-	// - For each sub mesh get its vetex/index/material ID.
-	// - Shader should've set prior, all we need to do is upload new parameters.
-	// - Set the texture for the sub mesh.
-	// - Draw.
-
-	// Couple of things extra needed.
-	// - Pass in a list of lights, unless we store it in the renderer.
-	//
-	// - Pass in the camera
-	//
-	// Current proposed function parameters
-	//
-	// (DrawList..., LightList..., Camera);
-
 	ClearScreen();
 
 	// Just know that we use this shader for now
@@ -160,6 +132,8 @@ void CRenderer::Render(const DrawMeshList* drawMeshList)
 			pShader->SetProjViewMatrix(vpMat);
 			pShader->SetInvWorldMatrx(invWorld);
 			pShader->SetWorldMatrix(world);
+
+			pShader->SetPointLight(glm::vec3(0, 10, 0), glm::vec3(1, 1, 1), 1, 150);
 
 			m_openGL.RenderBuffer(pMesh->GetVertexBuffer(), pMesh->GetIndexBuffer());
 
@@ -215,6 +189,15 @@ int CRenderer::GetScreenWidth() const
 int CRenderer::GetScreenHeight() const
 {
 	return m_openGL.GetScreenHeight();
+}
+
+void CRenderer::SetWireFrame(bool bEnable)
+{
+	if (m_bWireFrame != bEnable)
+	{
+		m_bWireFrame = bEnable;
+		m_openGL.SetWireFrame(m_bWireFrame);
+	}
 }
 
 //------------------------------------------------------------------

@@ -92,8 +92,6 @@ void CApp::ShutDown()
 	// Nuke assets on application close!!!!!!!!!
 	ASSETMGR->ShutDown();
 
-	// Shut down the renderer
-
 	// Shut down the scene manager
 	m_sceneMgr.ShutDown();
 
@@ -307,7 +305,6 @@ bool CApp::OnLoadAssets()
 	// Load textures
 	std::string myTextureTest = "..\\Textures\\test.bmp";
 	std::string myTexturePlane = "..\\Textures\\plane.bmp";
-
 	std::string testTextureID = "Test_1";
 	std::string planeTextureID = "Plane_1";
 

@@ -49,6 +49,8 @@ public:
 	int GetScreenWidth() const;
 	int GetScreenHeight() const;
 
+	void WireFrameMode(bool bEnable);
+
 	void ShutDown();
 
 protected:

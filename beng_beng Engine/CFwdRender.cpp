@@ -70,8 +70,14 @@ ErrorId CFwdRender::VInit()
 	m_invWorldMatLoc = GetUniformLocation("invWorldMat");
 	m_diffuseTexSamplerLoc = GetUniformLocation("diffuseTextureSampler");
 
+	m_pointLightLoc = GetUniformLocation("pointLight");
+	m_lightColorLoc = GetUniformLocation("lightColor");
+	m_lightIntensityLoc = GetUniformLocation("lightIntensity");
+	m_lightAttenuationLoc = GetUniformLocation("attenuation");
+
 	// If fail to get uniforms
-	if (m_projViewMatLoc < 0 || m_worldMatLoc < 0 || m_diffuseTexSamplerLoc < 0)
+	if (m_projViewMatLoc < 0 || m_worldMatLoc < 0 || m_diffuseTexSamplerLoc < 0 ||
+		m_pointLightLoc < 0 || m_lightColorLoc < 0 || m_lightIntensityLoc < 0 || m_lightAttenuationLoc < 0)
 	{
 		m_bInit = false;
 		return ERRORID_SHADER_UNIFORM_GET_FAILED;
@@ -104,6 +110,14 @@ void CFwdRender::SetDiffuseTexture(GLuint textureID)
 	glUniform1i(m_diffuseTexSamplerLoc, textureID);
 }
 
+void CFwdRender::SetPointLight(const glm::vec3 & pos, const glm::vec3 & color, float lightIntensity, float attenuation)
+{
+	glUniform3f(m_pointLightLoc, pos.x, pos.y, pos.z);
+	glUniform3f(m_lightColorLoc, color.r, color.g, color.b);
+	glUniform1f(m_lightIntensityLoc, lightIntensity);
+	glUniform1f(m_lightAttenuationLoc, attenuation);
+}
+
 void CFwdRender::operator=(const CFwdRender & other)
 {
 	m_vertexShaderPath = other.m_vertexShaderPath;
@@ -111,6 +125,10 @@ void CFwdRender::operator=(const CFwdRender & other)
 	m_projViewMatLoc = other.m_projViewMatLoc;
 	m_worldMatLoc = other.m_worldMatLoc;
 	m_invWorldMatLoc = other.m_invWorldMatLoc;
+	m_pointLightLoc = other.m_pointLightLoc;
+	m_lightColorLoc = other.m_lightColorLoc;
+	m_lightIntensityLoc = other.m_lightIntensityLoc;
+	m_lightAttenuationLoc = other.m_lightAttenuationLoc;
 }
 
 const std::string & CFwdRender::GetVertexShaderPath() const

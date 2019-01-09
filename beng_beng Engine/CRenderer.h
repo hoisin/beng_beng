@@ -44,6 +44,8 @@ public:
 	int GetScreenWidth() const;
 	int GetScreenHeight() const;
 
+	void SetWireFrame(bool bEnable);
+
 protected:
 	// Clears the screen to background colour
 	void ClearScreen();
@@ -56,5 +58,5 @@ protected:
 
 	glm::mat4 m_projMatrix;
 	glm::mat4 m_viewMatrix;
-
+	bool m_bWireFrame;
 };

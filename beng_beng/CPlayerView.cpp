@@ -101,11 +101,22 @@ void CPlayerView::VUpdate(float deltaT)
 	{
 		m_pApp->CloseRun();
 	}
+	if (m_keyboard.IsKeyDown('N'))
+	{
+		m_pSceneMgr->WireFrameMode(false);
+	}
+	if (m_keyboard.IsKeyDown('M'))
+	{
+		m_pSceneMgr->WireFrameMode(true);
+	}
 
 	// Update the scene when world has been updated
-	//if (m_pWorld->IsUpdated()) {
+	if (m_pWorld->IsUpdated()) {
 		m_pSceneMgr->UpdateScene(m_pWorld);
-	//}
+	}
+
+	// Update cameras
+	m_pSceneMgr->UpdateCamera();
 
 	// Interpolation value probably submitted here
 	int camNum = 1;

@@ -48,6 +48,8 @@ void CSceneManager::AddLight()
 
 void CSceneManager::UpdateCamera()
 {
+	for (int i = 0; i < (int)m_cameraArray.size(); i++)
+		m_cameraArray[i]->Update();
 }
 
 void CSceneManager::UpdateScene(CWorld* pWorld)
@@ -56,10 +58,6 @@ void CSceneManager::UpdateScene(CWorld* pWorld)
 
 	pWorld->GetDrawObjectList(&m_objDrawList);
 	PARTICLEMGR->GetActiveParticles(&m_objDrawList);
-
-	for (int i = 0; i < (int)m_cameraArray.size(); i++) 
-		m_cameraArray[i]->Update();
-	
 }
 
 void CSceneManager::RenderScene(int cameraNo)
@@ -123,7 +121,7 @@ void CSceneManager::RenderScene(int cameraNo, float tickInterpValue)
 
 	int cam = cameraNo - 1;
 	m_pRenderer->UpdateProjMatrix(m_cameraArray[cam]->GetProjectionMatrix());
-	m_pRenderer->UpdateViewMatrix(m_cameraArray[cam]->GetViewMatrix(tickInterpValue));
+	m_pRenderer->UpdateViewMatrix(m_cameraArray[cam]->GetViewMatrix());
 	m_pRenderer->Render(&m_drawMeshList);
 }
 
@@ -135,6 +133,11 @@ int CSceneManager::GetScreenWidth() const
 int CSceneManager::GetScreenHeight() const
 {
 	return m_pRenderer->GetScreenHeight();
+}
+
+void CSceneManager::WireFrameMode(bool bEnable)
+{
+	m_pRenderer->SetWireFrame(bEnable);
 }
 
 void CSceneManager::ShutDown()

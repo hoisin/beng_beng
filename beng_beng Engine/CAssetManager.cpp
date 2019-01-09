@@ -166,6 +166,13 @@ bool CAssetManager::LoadModel(const std::string& fileDir, const std::string& fil
 	return result;
 }
 
+//------------------------------------------------------------------
+//
+//	CreateModelCube(..)
+//
+//	Creates model cube for rendering
+//
+//------------------------------------------------------------------
 ErrorId CAssetManager::CreateModelCube(float size, int subDiv, EVertexType vertType, const std::string & modelID, const std::string& materialID)
 {
 	ErrorId error = m_meshDataMgr.CreateCube(modelID, size, vertType, subDiv);
@@ -186,6 +193,13 @@ ErrorId CAssetManager::CreateModelCube(float size, int subDiv, EVertexType vertT
 	return error;
 }
 
+//------------------------------------------------------------------
+//
+//	CreateModelSphere(..)
+//
+//	Creates model sphere for rendering
+//		
+//------------------------------------------------------------------
 ErrorId CAssetManager::CreateModelSphere(float size, int subDiv, EVertexType vertType, const std::string & modelID, const std::string& materialID)
 {
 	ErrorId error = m_meshDataMgr.CreateSphere(modelID, (float)size, vertType, subDiv);
@@ -206,6 +220,13 @@ ErrorId CAssetManager::CreateModelSphere(float size, int subDiv, EVertexType ver
 	return error;
 }
 
+//------------------------------------------------------------------
+//
+//	CreateModelPlane(..)
+//
+//	Creates model plane for rendering
+//
+//------------------------------------------------------------------
 ErrorId CAssetManager::CreateModelPlane(float size, int subDiv, EVertexType vertType, const std::string & modelID, const std::string& materialID)
 {
 	ErrorId error = m_meshDataMgr.CreatePlane(modelID, (float)size, vertType, subDiv);
