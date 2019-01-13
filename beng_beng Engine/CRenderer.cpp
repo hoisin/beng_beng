@@ -94,6 +94,8 @@ void CRenderer::Render(const DrawMeshList* drawMeshList)
 	// Just know that we use this shader for now
 	CFwdRender* pShader = ASSETMGR->GetFwdRenderTech();
 	pShader->Enable();
+	pShader->SetActivePointLights(5);
+	pShader->SetActiveSpotLight(1);
 
 	auto drawMeshIT = drawMeshList->begin();
 	while (drawMeshIT != drawMeshList->end()) {
@@ -133,7 +135,16 @@ void CRenderer::Render(const DrawMeshList* drawMeshList)
 			pShader->SetInvWorldMatrx(invWorld);
 			pShader->SetWorldMatrix(world);
 
-			pShader->SetPointLight(glm::vec3(0, 10, 0), glm::vec3(1, 1, 1), 1, 150);
+			pShader->SetPointLight(0, glm::vec3(200, 10, 0), glm::vec3(1, 1, 1), 1, 150);
+			pShader->SetPointLight(1, glm::vec3(150, 10, 0), glm::vec3(0, 1, 1), 1, 150);
+			pShader->SetPointLight(2, glm::vec3(-150, 10, 0), glm::vec3(1, 1, 0), 1, 150);
+			pShader->SetPointLight(3, glm::vec3(0, 10, 150), glm::vec3(0, 0, 1), 1, 150);
+			pShader->SetPointLight(4, glm::vec3(0, 10, -150), glm::vec3(1, 0, 0), 1, 150);
+
+			pShader->SetSpotLight(0, glm::vec3(0,80,0), glm::vec3(1,1,1), 60,
+				glm::vec3(0, -1, 0), 1, 150, 0.5);
+
+			pShader->UploadPointLightData();
 
 			m_openGL.RenderBuffer(pMesh->GetVertexBuffer(), pMesh->GetIndexBuffer());
 
